@@ -1,0 +1,179 @@
+---
+interface Photo {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+interface Props {
+  photos: Photo[];
+  interval?: number;
+}
+
+const { photos, interval = 2500 } = Astro.props;
+
+const visiblePhotos = photos.slice(0, 5);
+const placeholder =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3C/svg%3E";
+---
+
+<div
+  class="photo-stack"
+  data-photo-stack
+  data-interval={interval}
+  aria-label="Galerie photos du club"
+>
+  {
+    visiblePhotos.map((photo, index) => (
+      <img
+        class="photo-stack__image"
+        src={index === 0 ? photo.src : placeholder}
+        data-src={index === 0 ? undefined : photo.src}
+        alt={photo.alt}
+        width={photo.width}
+        height={photo.height}
+        loading={index === 0 ? "eager" : "lazy"}
+        fetchpriority={index === 0 ? "high" : "low"}
+        decoding={index === 0 ? "sync" : "async"}
+        data-position={index}
+      />
+    ))
+  }
+</div>
+
+<script>
+  const initializePhotoStack = (stack: HTMLElement) => {
+    const images = Array.from(
+      stack.querySelectorAll<HTMLImageElement>(".photo-stack__image"),
+    );
+
+    if (images.length < 2) {
+      return;
+    }
+
+    const interval = Number(stack.dataset.interval ?? 2500);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    let currentIndex = 0;
+    let timer: number | undefined;
+
+    const loadDeferredImages = () => {
+      images.forEach((image) => {
+        const src = image.dataset.src;
+
+        if (!src) return;
+
+        image.src = src;
+        delete image.dataset.src;
+      });
+    };
+
+    const updatePositions = () => {
+      images.forEach((image, index) => {
+        const position = (index - currentIndex + images.length) % images.length;
+
+        image.dataset.position = String(position);
+      });
+    };
+
+    const start = () => {
+      if (reducedMotion.matches || timer !== undefined) {
+        return;
+      }
+
+      timer = window.setInterval(() => {
+        currentIndex = (currentIndex + 1) % images.length;
+        updatePositions();
+      }, interval);
+    };
+
+    const stop = () => {
+      if (timer === undefined) {
+        return;
+      }
+
+      window.clearInterval(timer);
+      timer = undefined;
+    };
+
+    stack.addEventListener("mouseenter", stop);
+    stack.addEventListener("mouseleave", start);
+    stack.addEventListener("focusin", stop);
+    stack.addEventListener("focusout", start);
+
+    reducedMotion.addEventListener("change", () => {
+      stop();
+      start();
+    });
+
+    updatePositions();
+    start();
+
+    window.addEventListener("load", () => {
+      window.setTimeout(loadDeferredImages, 800);
+    });
+  };
+
+  document
+    .querySelectorAll<HTMLElement>("[data-photo-stack]")
+    .forEach(initializePhotoStack);
+</script>
+
+<style>
+  .photo-stack {
+    position: relative;
+    min-height: 430px;
+    isolation: isolate;
+  }
+
+  .photo-stack__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 42px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+    transition:
+      transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+      filter 500ms ease;
+  }
+
+  .photo-stack__image[data-position="0"] {
+    z-index: 5;
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+
+  .photo-stack__image[data-position="1"] {
+    z-index: 4;
+    opacity: 0.9;
+    transform: translate(14px, 8px) rotate(2.5deg) scale(0.98);
+  }
+
+  .photo-stack__image[data-position="2"] {
+    z-index: 3;
+    opacity: 0.75;
+    transform: translate(-12px, 14px) rotate(-2deg) scale(0.96);
+  }
+
+  .photo-stack__image[data-position="3"] {
+    z-index: 2;
+    opacity: 0.55;
+    transform: translate(20px, 18px) rotate(4deg) scale(0.94);
+  }
+
+  .photo-stack__image[data-position="4"] {
+    z-index: 1;
+    opacity: 0.35;
+    transform: translate(-18px, 22px) rotate(-4deg) scale(0.92);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .photo-stack__image {
+      transition: none;
+    }
+  }
+</style>

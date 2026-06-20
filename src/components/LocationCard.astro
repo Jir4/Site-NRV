@@ -1,0 +1,70 @@
+---
+import WeatherIcon from "./icons/WeatherIcon.astro";
+
+interface LocationCondition {
+  icon: string;
+  label: string;
+}
+
+interface Location {
+  id: string;
+  name: string;
+  address: string;
+  type: string;
+  usage: string;
+  conditions: LocationCondition[];
+  lat: number;
+  lon: number;
+}
+
+interface Props {
+  location: Location;
+  className?: string;
+  relation?: "initiation" | "competition";
+  routeTo?: boolean;
+}
+
+const { location, className = "", relation, routeTo = false } = Astro.props;
+const getOsmUrl = (lat: number, lon: number) =>
+  `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=17/${lat}/${lon}`;
+---
+
+<article
+  class={`map-card ${className}`}
+  data-route-to={routeTo ? true : undefined}
+  data-relation={relation}
+  data-location-id={location.id}
+>
+  <div class="map-content">
+    <div class="location-heading">
+      <div class="location-title">
+        <h3>{location.name}</h3>
+        <p>{location.type === "outdoor" ? "Outdoor" : "Indoor"} · {location.usage}</p>
+        {
+          location.conditions.length > 0 && (
+            <div class="location-conditions" aria-label="Conditions météo">
+              {location.conditions.map((condition) => (
+                <span class={`weather-chip is-${condition.icon}`}>
+                  <WeatherIcon icon={condition.icon} />
+                  {condition.label}
+                </span>
+              ))}
+            </div>
+          )
+        }
+      </div>
+    </div>
+    <p>{location.address}</p>
+    <a href={getOsmUrl(location.lat, location.lon)} target="_blank" rel="noreferrer">
+      Ouvrir {location.name} dans OpenStreetMap
+    </a>
+  </div>
+  <div
+    class="map-frame"
+    data-map
+    data-lat={location.lat}
+    data-lon={location.lon}
+    data-title={location.name}
+    aria-label={`Carte - ${location.name}`}
+  />
+</article>

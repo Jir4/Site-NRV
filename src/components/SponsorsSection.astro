@@ -1,0 +1,19 @@
+---
+interface Props { sponsors: string[] }
+const { sponsors } = Astro.props;
+---
+
+<section id="sponsors" class="dark">
+  <div class="wrap">
+    <h2 class="section-title">Ils soutiennent le club.</h2>
+    <div class="cards">
+      {sponsors.map((sponsor) => (
+        <article class="card">
+          <strong>Partenaire</strong>
+          <h3>{sponsor}</h3>
+          <p>Logo à intégrer dans la version finale.</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

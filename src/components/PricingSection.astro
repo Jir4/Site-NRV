@@ -1,0 +1,24 @@
+---
+interface Props { site: any }
+const { site } = Astro.props;
+---
+
+<section class="dark" id="tarifs">
+  <div class="wrap split">
+    <div>
+      <h2 class="section-title">Tarifs et inscription.</h2>
+      <p class="intro">
+        Les tarifs indiqués correspondent à une année de cotisation complète pour la saison. Ils comprennent l’adhésion au club, l’accès aux cours et la licence fédérale. Paiement possible en chèques, espèces, chèques vacances, bons CAF et Pass’Sport selon conditions.
+      </p>
+      <a class="button" href={site.helloAssoUrl} target="_blank" rel="noreferrer" data-join-cta>S'inscrire</a>
+    </div>
+    <div class="cards" style="grid-template-columns: 1fr; margin-top: 0;">
+      {site.prices.map((price: any) => (
+        <article class="card price">
+          <span><strong>{price.label}</strong>{price.details}</span>
+          <b>{price.value}</b>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

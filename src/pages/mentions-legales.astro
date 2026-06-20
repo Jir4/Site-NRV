@@ -1,0 +1,93 @@
+---
+import { site } from "../data/site";
+import "../styles/global.css";
+
+const currentYear = new Date().getFullYear();
+const president = site.contacts.find((contact) => contact.role === "Président");
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={`Mentions légales du site ${site.clubName}.`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Mentions légales - {site.clubName}</title>
+  </head>
+  <body>
+    <main class="page legal-page">
+      <section class="legal-hero">
+        <div class="wrap">
+          <p class="eyebrow">Informations légales</p>
+          <h1>Mentions légales</h1>
+          <p class="lead">
+            Cette page présente les informations relatives à l’édition, à l’hébergement et à l’utilisation du site officiel de {site.clubName}.
+          </p>
+          <p><a class="button" href="/">Retour au site</a></p>
+        </div>
+      </section>
+
+      <section>
+        <div class="wrap legal-grid">
+          <article class="card legal-card">
+            <strong>Éditeur du site</strong>
+            <h2>{site.clubName}</h2>
+            <p>Club de roller de vitesse basé à Nancy.</p>
+            <p>Email : <a href={`mailto:${site.email}`}>{site.email}</a></p>
+            <p>Téléphone : <a href={`tel:${site.phone.replaceAll(".", "")}`}>{site.phone}</a></p>
+          </article>
+
+          <article class="card legal-card">
+            <strong>Responsable de publication</strong>
+            <h2>{president?.name ?? "Président du club"}</h2>
+            <p>{president?.role ?? "Président"} de {site.clubName}.</p>
+            <p>Contact : <a href={`mailto:${site.email}`}>{site.email}</a></p>
+          </article>
+
+          <article class="card legal-card">
+            <strong>Hébergement</strong>
+            <h2>Serveur privé</h2>
+            <p>Le site est hébergé sur un serveur privé virtuel (VPS) administré pour le compte du club.</p>
+            <p>Les coordonnées complètes du fournisseur d’hébergement du VPS sont à compléter avant la mise en ligne publique.</p>
+          </article>
+
+          <article class="card legal-card">
+            <strong>Propriété intellectuelle</strong>
+            <h2>Contenus du site</h2>
+            <p>Les textes, visuels, photographies, logos et éléments graphiques présents sur ce site sont la propriété de {site.clubName} ou sont utilisés avec autorisation.</p>
+            <p>Toute reproduction ou réutilisation sans autorisation préalable est interdite.</p>
+          </article>
+
+          <article class="card legal-card">
+            <strong>Données personnelles</strong>
+            <h2>Contact et inscription</h2>
+            <p>Les données transmises par email ou via les services d’inscription externes sont utilisées uniquement pour répondre aux demandes, gérer les inscriptions et assurer le suivi de la vie du club.</p>
+            <p>Les inscriptions en ligne sont gérées par HelloAsso. Les données saisies sur cette plateforme sont soumises aux conditions et à la politique de confidentialité de HelloAsso.</p>
+            <p>Pour toute demande d’accès, de rectification ou de suppression de données, contactez le club à l’adresse <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+          </article>
+
+          <article class="card legal-card">
+            <strong>Cookies et services tiers</strong>
+            <h2>Fonctionnement du site</h2>
+            <p>Ce site statique ne dépose pas de cookies de mesure d’audience ou de publicité.</p>
+            <p>Des services tiers peuvent être chargés pour afficher certaines fonctionnalités : cartes OpenStreetMap/Leaflet, polices Google Fonts, lien Instagram et inscription HelloAsso.</p>
+          </article>
+
+          <article class="card legal-card">
+            <strong>Crédits</strong>
+            <h2>Photos et réalisation</h2>
+            <p>Photos : {site.clubName}, membres du club ou contributeurs autorisés.</p>
+            <p>Cartographie : données © OpenStreetMap contributors, tuiles CARTO.</p>
+            <p>Dernière mise à jour : {currentYear}.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

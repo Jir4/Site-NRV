@@ -1,0 +1,33 @@
+---
+import PhotoStack from "./PhotoStack.astro";
+
+interface Props {
+  helloAssoUrl: string;
+}
+
+const { helloAssoUrl } = Astro.props;
+const photos = [
+  { src: "/images/club/photo0.webp", alt: "Entraînement sur la piste", width: 1200, height: 799 },
+  { src: "/images/club/photo1.webp", alt: "Départ d'une course", width: 1200, height: 900 },
+  { src: "/images/club/photo2.webp", alt: "Les membres du club", width: 1200, height: 801 },
+  { src: "/images/club/photo3.webp", alt: "Compétition de roller", width: 900, height: 1200 },
+  { src: "/images/club/photo4.webp", alt: "Séance d'entraînement", width: 1200, height: 800 },
+];
+---
+
+<header class="hero" id="accueil">
+  <div class="hero-inner">
+    <div>
+      <p class="eyebrow">Roller vitesse à Nancy</p>
+      <h1>Le roller de vitesse commence ici, dès 5 ans.</h1>
+      <p class="lead">
+        À Nancy, les enfants découvrent le roller dans un cadre encadré et convivial. Puis, s’ils accrochent, le club les accompagne vers la technique, la vitesse et la compétition.
+      </p>
+      <div class="hero-actions">
+        <a class="button" href={helloAssoUrl} target="_blank" rel="noreferrer" data-join-cta>S'inscrire</a>
+        <a class="button secondary" href="#groupes">Voir les groupes et horaires</a>
+      </div>
+    </div>
+    <PhotoStack photos={photos} interval={3500} />
+  </div>
+</header>

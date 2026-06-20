@@ -1,0 +1,58 @@
+---
+import NavBar from "../components/NavBar.astro";
+import HeroSection from "../components/HeroSection.astro";
+import GroupsLocationsSection from "../components/GroupsLocationsSection.astro";
+import PricingSection from "../components/PricingSection.astro";
+import ClubSection from "../components/ClubSection.astro";
+import GallerySection from "../components/GallerySection.astro";
+import ContactSection from "../components/ContactSection.astro";
+import SponsorsSection from "../components/SponsorsSection.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import PageInteractions from "../components/PageInteractions.astro";
+import { site } from "../data/site";
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Club de roller de vitesse à Nancy : enfants, initiation, compétition, horaires, tarifs et inscription."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+    <title>{site.clubName} - Roller vitesse à Nancy</title>
+  </head>
+  <body>
+    <div class="page">
+      <NavBar site={site} />
+      <HeroSection helloAssoUrl={site.helloAssoUrl} />
+      <main>
+        <GroupsLocationsSection site={site} />
+        <PricingSection site={site} />
+        <ClubSection />
+        <GallerySection />
+        <ContactSection site={site} />
+        <SponsorsSection sponsors={site.sponsors} />
+      </main>
+      <SiteFooter clubName={site.clubName} />
+      <div class="egg" aria-hidden="true"></div>
+    </div>
+    <PageInteractions />
+  </body>
+</html>

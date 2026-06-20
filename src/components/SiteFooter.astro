@@ -1,0 +1,10 @@
+---
+interface Props { clubName: string }
+const { clubName } = Astro.props;
+---
+
+<footer class="footer">
+  <div class="wrap">
+    <span>© {new Date().getFullYear()} {clubName}</span><a href="/mentions-legales/">Mentions légales</a>
+  </div>
+</footer>

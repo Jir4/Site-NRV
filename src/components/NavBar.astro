@@ -1,0 +1,27 @@
+---
+interface Props {
+  site: {
+    logoUrl: string;
+    helloAssoUrl: string;
+  };
+}
+
+const { site } = Astro.props;
+---
+
+<nav class="nav" aria-label="Navigation principale">
+  <a class="brand" href="#accueil" data-egg aria-label="Retour à l'accueil">
+    <img src={site.logoUrl} alt="" width="100" height="100" decoding="async" />
+  </a>
+  <div class="links">
+    <a href="#groupes" data-section-link>Groupes</a>
+    <a href="#tarifs" data-section-link>Tarifs</a>
+    <a href="#club" data-section-link>Club</a>
+    <a href="#galerie" data-section-link>Galerie</a>
+    <a href="#contact" data-section-link>Contact</a>
+  </div>
+  <a class="button" href={site.helloAssoUrl} target="_blank" rel="noreferrer" data-join-cta>
+    S'INSCRIRE
+  </a>
+</nav>
+<div class="scroll-progress" aria-hidden="true"></div>

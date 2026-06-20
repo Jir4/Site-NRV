@@ -1,0 +1,345 @@
+<script>
+  const trigger = document.querySelector("[data-egg]");
+  const wheel = document.querySelector(".egg");
+  const navLinks = [...document.querySelectorAll("[data-section-link]")];
+  const trackedSections = navLinks
+    .map((link) => document.querySelector(link.getAttribute("href")))
+    .filter(Boolean);
+  const heroSection = document.querySelector("#accueil");
+  const observedSections = [heroSection, ...trackedSections].filter(Boolean);
+
+  const setActiveLink = (sectionId) => {
+    navLinks.forEach((link) => {
+      const isActive = sectionId && link.getAttribute("href") === `#${sectionId}`;
+      link.classList.toggle("is-active", isActive);
+      if (isActive) {
+        link.setAttribute("aria-current", "true");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  };
+
+  const updateProgress = () => {
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = scrollable > 0 ? window.scrollY / scrollable : 0;
+    document.documentElement.style.setProperty("--scroll-progress", `${Math.min(progress, 1) * 100}%`);
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+      if (visible?.target?.id) {
+        setActiveLink(visible.target.id === "accueil" ? null : visible.target.id);
+      }
+    },
+    { rootMargin: "-30% 0px -45% 0px", threshold: [0.15, 0.35, 0.6] },
+  );
+
+  observedSections.forEach((section) => observer.observe(section));
+  updateProgress();
+  window.addEventListener("scroll", updateProgress, { passive: true });
+
+  trigger?.addEventListener("click", () => {
+    wheel?.classList.remove("run");
+    void wheel?.clientWidth;
+    wheel?.classList.add("run");
+  });
+
+  const confettiColors = ["#95c23d", "#d7ff79", "#ffffff", "#101510"];
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  const launchClubConfetti = (source) => {
+    if (reducedMotion.matches) return;
+
+    const rect = source.getBoundingClientRect();
+    const count = 50;
+
+    for (let index = 0; index < count; index += 1) {
+      const piece = document.createElement("span");
+      const originX = rect.left + rect.width * (0.25 + Math.random() * 0.5);
+      const originY = rect.top + rect.height * (0.25 + Math.random() * 0.5);
+      const size = 6 + Math.random() * 7;
+      const duration = 1400 + Math.random() * 500;
+      const delay = Math.random() * 100;
+      const angle = (-135 + Math.random() * 90) * (Math.PI / 180);
+      const speed = 380 + Math.random() * 260;
+
+      let x = 0;
+      let y = 0;
+      let velocityX = Math.cos(angle) * speed;
+      let velocityY = Math.sin(angle) * speed;
+
+      const gravity = 950;
+      const drag = 1.15 + Math.random() * 0.45;
+      const wind = -30 + Math.random() * 60;
+      const rotationStart = Math.random() * 360;
+      const rotationSpeed = -520 + Math.random() * 1040;
+      const flutterSpeed = 3 + Math.random() * 4;
+      const flutterPhase = Math.random() * Math.PI * 2;
+      const keyframes = [];
+      const steps = 24;
+      const durationSeconds = duration / 1000;
+      const deltaTime = durationSeconds / steps;
+
+      for (let step = 0; step <= steps; step += 1) {
+        const progress = step / steps;
+        const time = progress * durationSeconds;
+
+        if (step > 0) {
+          const damping = Math.exp(-drag * deltaTime);
+          velocityX += wind * deltaTime;
+          velocityY += gravity * deltaTime;
+          velocityX *= damping;
+          velocityY *= damping;
+          x += velocityX * deltaTime;
+          y += velocityY * deltaTime;
+        }
+
+        const flip = Math.cos(time * Math.PI * 2 * flutterSpeed + flutterPhase);
+        const rotation = rotationStart + rotationSpeed * time;
+
+        keyframes.push({
+          offset: progress,
+          opacity: progress < 0.08 ? progress / 0.08 : progress > 0.72 ? (1 - progress) / 0.28 : 1,
+          transform: `translate3d(${x}px, ${y}px, 0) rotate(${rotation}deg) scaleX(${flip})`,
+        });
+      }
+
+      piece.className = "club-confetti";
+      piece.style.left = `${originX}px`;
+      piece.style.top = `${originY}px`;
+      piece.style.width = `${size}px`;
+      piece.style.height = `${size * (1.2 + Math.random())}px`;
+      piece.style.background = confettiColors[index % confettiColors.length];
+      document.body.append(piece);
+
+      const animation = piece.animate(keyframes, { duration, delay, easing: "linear", fill: "forwards" });
+      animation.onfinish = () => piece.remove();
+      animation.oncancel = () => piece.remove();
+    }
+  };
+
+  document.querySelectorAll("[data-join-cta]").forEach((button) => {
+    let lastBurst = 0;
+
+    button.addEventListener("pointerenter", () => {
+      const now = Date.now();
+      if (now - lastBurst < 900) return;
+      lastBurst = now;
+      launchClubConfetti(button);
+    });
+
+    button.addEventListener("focus", () => launchClubConfetti(button));
+  });
+
+  const groupsSection = document.querySelector(".groups-section");
+  const setActiveRelation = (relation) => {
+    groupsSection?.classList.toggle("is-relation-initiation-active", relation === "initiation");
+    groupsSection?.classList.toggle("is-relation-competition-active", relation === "competition");
+  };
+
+  document.querySelectorAll("[data-relation]").forEach((element) => {
+    const relation = element.dataset.relation;
+    element.addEventListener("pointerenter", () => setActiveRelation(relation));
+    element.addEventListener("focusin", () => setActiveRelation(relation));
+    element.addEventListener("pointerleave", () => setActiveRelation(null));
+    element.addEventListener("focusout", () => setActiveRelation(null));
+  });
+
+  const clearActiveSchedules = () => {
+    document.querySelectorAll("[data-location-id]").forEach((location) => {
+      location.classList.remove("is-schedule-target");
+    });
+    document.querySelectorAll("[data-schedule-relation]").forEach((slot) => {
+      slot.classList.remove("is-active");
+    });
+    setActiveRelation(null);
+  };
+
+  document.querySelectorAll("[data-schedule-relation]").forEach((slot) => {
+    const activate = () => {
+      clearActiveSchedules();
+      slot.classList.add("is-active");
+      setActiveRelation(slot.dataset.scheduleRelation);
+
+      slot.dataset.locationIds?.split(" ").forEach((id) => {
+        document.querySelector(`[data-location-id="${id}"]`)?.classList.add("is-schedule-target");
+      });
+    };
+
+    slot.addEventListener("pointerenter", activate);
+    slot.addEventListener("focus", activate);
+    slot.addEventListener("pointerleave", clearActiveSchedules);
+    slot.addEventListener("blur", clearActiveSchedules);
+  });
+
+  const mapContainers = [...document.querySelectorAll("[data-map]")];
+  let leafletPromise;
+  let mapsInitialized = false;
+
+  const loadStylesheet = (href) =>
+    new Promise((resolve, reject) => {
+      if (document.querySelector(`link[href="${href}"]`)) {
+        resolve();
+        return;
+      }
+
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = href;
+      link.onload = resolve;
+      link.onerror = reject;
+      document.head.append(link);
+    });
+
+  const loadScript = (src) =>
+    new Promise((resolve, reject) => {
+      if (document.querySelector(`script[src="${src}"]`)) {
+        resolve();
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = src;
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.body.append(script);
+    });
+
+  const loadLeaflet = () => {
+    if (window.L) return Promise.resolve();
+
+    leafletPromise ??= Promise.all([
+      loadStylesheet("https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"),
+      loadScript("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"),
+    ]);
+
+    return leafletPromise;
+  };
+
+  const initializeMaps = async () => {
+    if (mapsInitialized || mapContainers.length === 0) return;
+
+    mapsInitialized = true;
+    await loadLeaflet();
+
+    mapContainers.forEach((container) => {
+      if (!window.L) return;
+
+      const lat = Number(container.dataset.lat);
+      const lon = Number(container.dataset.lon);
+      const title = container.dataset.title || "Lieu d’entraînement";
+      const markerIcon = window.L.divIcon({
+        className: "club-map-marker",
+        html: "<span></span>",
+        iconSize: [30, 38],
+        iconAnchor: [15, 34],
+        popupAnchor: [0, -32],
+      });
+      const map = window.L.map(container, {
+        scrollWheelZoom: false,
+        zoomControl: false,
+        attributionControl: false,
+      }).setView([lat, lon], 15);
+
+      window.L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap &copy; CARTO",
+      }).addTo(map);
+
+      window.L.control.attribution({ prefix: false }).addTo(map);
+      window.L.marker([lat, lon], { icon: markerIcon }).addTo(map).bindPopup(title);
+    });
+  };
+
+  if ("IntersectionObserver" in window && mapContainers.length > 0) {
+    const mapObserver = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+
+        mapObserver.disconnect();
+        initializeMaps();
+      },
+      { rootMargin: "500px 0px" },
+    );
+
+    mapContainers.forEach((container) => mapObserver.observe(container));
+  } else {
+    initializeMaps();
+  }
+
+  const drawTrainingRoute = () => {
+    const section = document.querySelector(".groups-section .wrap");
+    const overlay = document.querySelector("[data-route-overlay]");
+
+    if (!section || !overlay) return;
+
+    const sectionRect = section.getBoundingClientRect();
+    const width = sectionRect.width;
+    const height = sectionRect.height;
+
+    overlay.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    overlay.setAttribute("width", `${width}`);
+    overlay.setAttribute("height", `${height}`);
+
+    const drawRoute = ({ fromSelector, toSelector, lineSelector, shadowSelector, startSelector, side = "left" }) => {
+      const from = document.querySelector(fromSelector);
+      const to = document.querySelector(toSelector);
+      const line = document.querySelector(lineSelector);
+      const shadow = document.querySelector(shadowSelector);
+      const start = document.querySelector(startSelector);
+
+      if (!from || !to || !line || !shadow || !start) return;
+
+      const fromRect = from.getBoundingClientRect();
+      const toRect = to.getBoundingClientRect();
+      const startX = (side === "right" ? fromRect.right : fromRect.left) - sectionRect.left;
+      const startY = fromRect.top - sectionRect.top + fromRect.height / 2;
+      const endX = (side === "right" ? toRect.right : toRect.left) - sectionRect.left;
+      const endY = toRect.top - sectionRect.top + toRect.height / 2;
+      const offsetX = 70;
+      const direction = side === "right" ? 1 : -1;
+      const bendX = startX + offsetX * direction;
+      const radius = 18;
+
+      const path = [
+        `M ${startX} ${startY}`,
+        `L ${bendX - radius * direction} ${startY}`,
+        `A ${radius} ${radius} 0 0 ${side === "right" ? 1 : 0} ${bendX} ${startY + radius}`,
+        `L ${bendX} ${endY - radius}`,
+        `A ${radius} ${radius} 0 0 ${side === "right" ? 1 : 0} ${bendX - radius * direction} ${endY}`,
+        `L ${endX} ${endY}`,
+      ].join(" ");
+
+      line.setAttribute("d", path);
+      shadow.setAttribute("d", path);
+      start.setAttribute("cx", `${startX}`);
+      start.setAttribute("cy", `${startY}`);
+    };
+
+    drawRoute({
+      fromSelector: "[data-route-from]",
+      toSelector: "[data-route-to]",
+      lineSelector: "[data-route-line]",
+      shadowSelector: "[data-route-shadow]",
+      startSelector: "[data-route-start]",
+      side: "left",
+    });
+    drawRoute({
+      fromSelector: "[data-route-from-competition]",
+      toSelector: "[data-route-to-competition]",
+      lineSelector: "[data-route-competition-line]",
+      shadowSelector: "[data-route-competition-shadow]",
+      startSelector: "[data-route-competition-start]",
+      side: "right",
+    });
+  };
+
+  drawTrainingRoute();
+  window.addEventListener("resize", drawTrainingRoute);
+</script>
