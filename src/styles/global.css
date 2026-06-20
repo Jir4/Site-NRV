@@ -594,6 +594,7 @@ section {
 .price b {
   font-size: 2.6rem;
   color: var(--club);
+  white-space: nowrap;
 }
 
 .footer {
@@ -762,6 +763,17 @@ section {
   .web-partners-list {
     justify-content: center;
     text-align: center;
+  }
+
+  .price {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .price b {
+    justify-self: start;
   }
 }
 
