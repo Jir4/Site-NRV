@@ -1,21 +1,6 @@
 ---
 import WeatherIcon from "./icons/WeatherIcon.astro";
-
-interface LocationCondition {
-  icon: string;
-  label: string;
-}
-
-interface Location {
-  id: string;
-  name: string;
-  address: string;
-  type: string;
-  usage: string;
-  conditions: LocationCondition[];
-  lat: number;
-  lon: number;
-}
+import type { Location } from "../data/site";
 
 interface Props {
   location: Location;
@@ -54,9 +39,14 @@ const getOsmUrl = (lat: number, lon: number) =>
         }
       </div>
     </div>
-    <p>{location.address}</p>
-    <a href={getOsmUrl(location.lat, location.lon)} target="_blank" rel="noreferrer">
-      Ouvrir {location.name} dans OpenStreetMap
+    <p class="location-address">{location.address}</p>
+    <a
+      href={getOsmUrl(location.lat, location.lon)}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={`Ouvrir ${location.name} dans OpenStreetMap`}
+    >
+      Voir la carte
     </a>
   </div>
   <div
@@ -68,3 +58,182 @@ const getOsmUrl = (lat: number, lon: number) =>
     aria-label={`Carte - ${location.name}`}
   />
 </article>
+
+<style>
+  .map-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: white;
+    box-shadow: 0 18px 50px rgba(16, 21, 16, 0.06);
+    transition:
+      transform 180ms ease,
+      opacity 180ms ease,
+      border-color 180ms ease;
+    will-change: transform;
+  }
+
+  .map-card.is-bazin-location {
+    position: relative;
+    z-index: 4;
+  }
+
+  .map-card.is-schedule-target {
+    transform: translate3d(0, -3px, 0);
+    border-color: rgba(149, 194, 61, 0.9);
+    outline: 4px solid rgba(149, 194, 61, 0.18);
+  }
+
+  .map-frame {
+    position: relative;
+    z-index: 0;
+    height: 240px;
+    background: rgba(149, 194, 61, 0.14);
+    border-top: 1px solid var(--line);
+  }
+
+  .map-frame :global(.leaflet-control-attribution) {
+    font-size: 0.66rem;
+    color: rgba(16, 21, 16, 0.58);
+  }
+
+  :global(.club-map-marker) {
+    background: transparent;
+    border: 0;
+  }
+
+  :global(.club-map-marker span) {
+    position: relative;
+    display: block;
+    width: 30px;
+    height: 30px;
+    border: 4px solid white;
+    border-radius: 999px 999px 999px 4px;
+    background: var(--club);
+    box-shadow:
+      0 10px 22px rgba(16, 21, 16, 0.26),
+      0 0 0 6px rgba(149, 194, 61, 0.2);
+    transform: rotate(-45deg);
+  }
+
+  :global(.club-map-marker span::after) {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    border-radius: 999px;
+    background: var(--ink);
+    opacity: 0.82;
+  }
+
+  .map-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 22px;
+  }
+
+  .location-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .map-content .location-title h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.12;
+  }
+
+  .map-content .location-title p {
+    margin: 5px 0 0;
+    color: var(--club-text);
+    font-family: var(--display);
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    line-height: 1.25;
+    text-transform: uppercase;
+  }
+
+  .location-conditions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .weather-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 7px;
+    border-radius: 999px;
+    background: rgba(149, 194, 61, 0.1);
+    color: var(--ink);
+    font-family: var(--display);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+
+  .weather-chip svg {
+    width: 14px;
+    height: 14px;
+    color: var(--club-text);
+  }
+
+  .map-content h3 {
+    margin: 0 0 8px;
+    font-size: 1.35rem;
+  }
+
+  .map-content p {
+    margin: 0 0 16px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .location-address {
+    position: relative;
+    padding: 10px 12px 10px 34px;
+    border: 1px solid rgba(16, 21, 16, 0.08);
+    border-radius: 16px;
+    background: linear-gradient(
+      135deg,
+      rgba(149, 194, 61, 0.12),
+      rgba(255, 255, 255, 0.72)
+    );
+    font-size: 0.95rem;
+  }
+
+  .location-address::before {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 14px;
+    width: 9px;
+    height: 9px;
+    border: 3px solid var(--club);
+    border-radius: 999px 999px 999px 2px;
+    transform: rotate(-45deg);
+  }
+
+  .map-content a {
+    margin-top: auto;
+    color: var(--ink);
+    font-family: var(--display);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration-color: var(--club);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+  }
+
+  .map-content a:hover {
+    color: var(--club-text);
+  }
+</style>

@@ -1,13 +1,14 @@
 ---
 import LocationCard from "./LocationCard.astro";
+import type { Group, Location, ScheduleSlot, SiteConfig } from "../data/site";
 
 interface Props {
-  site: any;
+  site: SiteConfig;
 }
 
 const { site } = Astro.props;
-const initiationLocations = site.locations.filter((location: any) => location.group === "initiation");
-const competitionLocations = site.locations.filter((location: any) => location.group === "competition");
+const initiationLocations = site.locations.filter((location) => location.group === "initiation");
+const competitionLocations = site.locations.filter((location) => location.group === "competition");
 ---
 
 <section id="groupes" class="groups-section">
@@ -18,7 +19,7 @@ const competitionLocations = site.locations.filter((location: any) => location.g
     </p>
     <div class="group-grid">
       <div class="group-bundle" data-route-from data-relation="initiation" aria-label="Groupes d'initiation du jeudi">
-        {site.groups.slice(0, 2).map((group: any) => (
+        {site.groups.slice(0, 2).map((group: Group) => (
           <article class="card group-card">
             <strong>{group.age}</strong>
             <h3>{group.name}</h3>
@@ -26,8 +27,8 @@ const competitionLocations = site.locations.filter((location: any) => location.g
             <div class="group-time">
               <span>Horaires</span>
               <div class="schedule-list">
-                {group.schedule.map((slot: any) => (
-                  <button class="schedule-line" type="button" data-schedule-relation="initiation" data-location-ids={slot.locationIds.join(" ")}>
+                {group.schedule.map((slot: ScheduleSlot) => (
+                  <button class="schedule-line" type="button" data-schedule-relation="initiation" data-location-ids={slot.locationIds.join(" ")} aria-pressed="false">
                     <b>{slot.label} {slot.time}</b>
                     {slot.note && <small>{slot.note}</small>}
                   </button>
@@ -37,7 +38,7 @@ const competitionLocations = site.locations.filter((location: any) => location.g
           </article>
         ))}
       </div>
-      {site.groups.slice(2).map((group: any) => (
+      {site.groups.slice(2).map((group: Group) => (
         <article
           class={`card group-card ${group.name === "Compétition" ? "group-card-wide" : ""}`}
           data-route-from-competition={group.name === "Compétition" ? true : undefined}
@@ -49,8 +50,8 @@ const competitionLocations = site.locations.filter((location: any) => location.g
           <div class="group-time">
             <span>Horaires</span>
             <div class="schedule-list">
-              {group.schedule.map((slot: any) => (
-                <button class="schedule-line" type="button" data-schedule-relation="competition" data-location-ids={slot.locationIds.join(" ")}>
+              {group.schedule.map((slot: ScheduleSlot) => (
+                <button class="schedule-line" type="button" data-schedule-relation="competition" data-location-ids={slot.locationIds.join(" ")} aria-pressed="false">
                   <b>{slot.label} {slot.time}</b>
                   {slot.note && <small>{slot.note}</small>}
                 </button>
@@ -66,13 +67,13 @@ const competitionLocations = site.locations.filter((location: any) => location.g
     </div>
     <div class="locations-layout" aria-label="Cartes des lieux d'entraînement">
       <div class="map-grid map-grid-single">
-        {initiationLocations.map((location: any) => (
+        {initiationLocations.map((location: Location) => (
           <LocationCard location={location} className="is-bazin-location" relation="initiation" routeTo />
         ))}
       </div>
       <section class="location-group location-group-competition" data-route-to-competition data-relation="competition" aria-label="Lieux du groupe compétition">
         <div class="map-grid map-grid-competition">
-          {competitionLocations.map((location: any) => <LocationCard location={location} />)}
+          {competitionLocations.map((location: Location) => <LocationCard location={location} />)}
         </div>
       </section>
     </div>

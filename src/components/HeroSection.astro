@@ -1,5 +1,10 @@
 ---
 import PhotoStack from "./PhotoStack.astro";
+import heroPhoto from "../assets/club/photo0.webp";
+import racePhoto from "../assets/club/photo1.webp";
+import teamPhoto from "../assets/club/photo2.webp";
+import competitionPhoto from "../assets/club/photo3.webp";
+import trainingPhoto from "../assets/club/photo4.webp";
 
 interface Props {
   helloAssoUrl: string;
@@ -7,11 +12,11 @@ interface Props {
 
 const { helloAssoUrl } = Astro.props;
 const photos = [
-  { src: "/images/club/photo0.webp", alt: "Entraînement sur la piste", width: 1200, height: 799 },
-  { src: "/images/club/photo1.webp", alt: "Départ d'une course", width: 1200, height: 900 },
-  { src: "/images/club/photo2.webp", alt: "Les membres du club", width: 1200, height: 801 },
-  { src: "/images/club/photo3.webp", alt: "Compétition de roller", width: 900, height: 1200 },
-  { src: "/images/club/photo4.webp", alt: "Séance d'entraînement", width: 1200, height: 800 },
+  { src: heroPhoto, alt: "Entraînement du Nancy Roller Vitesse sur piste" },
+  { src: racePhoto, alt: "Départ d'une course" },
+  { src: teamPhoto, alt: "Les membres du club" },
+  { src: competitionPhoto, alt: "Compétition de roller" },
+  { src: trainingPhoto, alt: "Séance d'entraînement" },
 ];
 ---
 

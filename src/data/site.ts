@@ -1,6 +1,65 @@
+export interface ScheduleSlot {
+  label: string;
+  time: string;
+  locationIds: string[];
+  note?: string;
+}
+
+export interface Group {
+  name: "Enfants" | "Initiation" | "Compétition";
+  age: string;
+  pitch: string;
+  time: string;
+  schedule: ScheduleSlot[];
+  place: string;
+}
+
+export interface LocationCondition {
+  icon: "rain" | "winter" | "sun";
+  label: string;
+}
+
+export interface Location {
+  id: string;
+  name: string;
+  address: string;
+  usedBy: string;
+  type: "indoor" | "outdoor";
+  usage: string;
+  conditions: LocationCondition[];
+  group: "initiation" | "competition";
+  lat: number;
+  lon: number;
+}
+
+export interface Price {
+  label: string;
+  value: string;
+  details: string;
+}
+
+export interface Contact {
+  role: string;
+  name: string;
+  detail?: string;
+}
+
+export interface SiteConfig {
+  clubName: string;
+  helloAssoUrl: string;
+  instagramUrl: string;
+  email: string;
+  phone: string;
+  color: string;
+  groups: Group[];
+  prices: Price[];
+  locations: Location[];
+  contacts: Contact[];
+  sponsors: string[];
+}
+
 export const site = {
   clubName: "Nancy Roller Vitesse",
-  logoUrl: "https://nancyrollervitesse.fr/Images/logowhite400_2.png",
   helloAssoUrl:
     "https://www.helloasso.com/associations/nancy-roller-vitesse/adhesions/adhesion-saison-2026-2027",
   instagramUrl: "https://www.instagram.com/nancy_roller_vitesse/",
@@ -14,9 +73,7 @@ export const site = {
       pitch:
         "Découvrir le roller, progresser en confiance et apprendre les bons réflexes.",
       time: "Jeudi 18h - 19h",
-      schedule: [
-        { label: "Jeudi", time: "18h - 19h", locationIds: ["bazin"] },
-      ],
+      schedule: [{ label: "Jeudi", time: "18h - 19h", locationIds: ["bazin"] }],
       place: "Gymnase Bazin, 49 rue Henri Bazin, 54000 Nancy",
     },
     {
@@ -25,9 +82,7 @@ export const site = {
       pitch:
         "Se perfectionner, gagner en aisance et rejoindre une dynamique de club.",
       time: "Jeudi 19h - 20h",
-      schedule: [
-        { label: "Jeudi", time: "19h - 20h", locationIds: ["bazin"] },
-      ],
+      schedule: [{ label: "Jeudi", time: "19h - 20h", locationIds: ["bazin"] }],
       place: "Gymnase Bazin, 49 rue Henri Bazin, 54000 Nancy",
     },
     {
@@ -43,7 +98,6 @@ export const site = {
           label: "Jeudi",
           time: "19h - 20h30",
           locationIds: ["moulin-noir", "cosec"],
-          note: "Moulin Noir l’hiver ou quand il pleut. COSEC quand il fait beau et chaud.",
         },
       ],
       place:
@@ -121,4 +175,4 @@ export const site = {
     { role: "Secrétaire", name: "ANANI Nicolas", detail: "" },
   ],
   sponsors: ["Ville de Nancy", "Métropole du Grand Nancy"],
-};
+} satisfies SiteConfig;

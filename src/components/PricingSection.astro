@@ -1,5 +1,7 @@
 ---
-interface Props { site: any }
+import type { Price, SiteConfig } from "../data/site";
+
+interface Props { site: SiteConfig }
 const { site } = Astro.props;
 ---
 
@@ -12,8 +14,8 @@ const { site } = Astro.props;
       </p>
       <a class="button" href={site.helloAssoUrl} target="_blank" rel="noreferrer" data-join-cta>S'inscrire</a>
     </div>
-    <div class="cards" style="grid-template-columns: 1fr; margin-top: 0;">
-      {site.prices.map((price: any) => (
+    <div class="cards cards-single">
+      {site.prices.map((price: Price) => (
         <article class="card price">
           <span><strong>{price.label}</strong>{price.details}</span>
           <b>{price.value}</b>

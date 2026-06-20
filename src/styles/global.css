@@ -8,7 +8,6 @@
   --line: rgba(16, 21, 16, 0.14);
   --radius: 28px;
   --display: "Rajdhani", "Avenir Next", "Segoe UI", sans-serif;
-  --scroll-progress: 0%;
   font-family: "Avenir Next", "Segoe UI", sans-serif;
   color: var(--ink);
   background: var(--paper);
@@ -45,7 +44,7 @@ a {
   padding: 10px 12px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 999px;
-  background: rgba(16, 21, 16, 0.76);
+  background: rgba(16, 21, 16, 0.72);
   color: white;
   backdrop-filter: blur(18px);
 }
@@ -106,11 +105,14 @@ a {
   top: 0;
   left: 0;
   z-index: 30;
-  width: var(--scroll-progress);
+  width: 100%;
   height: 3px;
   background: linear-gradient(90deg, var(--club), #d7ff79);
   box-shadow: 0 0 18px rgba(149, 194, 61, 0.5);
   pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
 }
 .button {
   display: inline-flex;
@@ -127,64 +129,67 @@ a {
   letter-spacing: 0.04em;
   text-decoration: none;
   box-shadow: 0 14px 28px rgba(149, 194, 61, 0.28);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease;
 }
 .button:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 18px 38px rgba(149, 194, 61, 0.36);
 }
 .button.secondary {
   background: white;
   box-shadow: none;
 }
 .instagram-button {
-  gap: 8px;
+  position: relative;
+  gap: 10px;
   overflow: hidden;
-  position: relative;
+  border: 1px solid rgba(16, 21, 16, 0.12);
+  background: white;
+  color: var(--ink);
+  box-shadow: 0 14px 28px rgba(16, 21, 16, 0.08);
   transition:
-    color 0.2s ease,
     transform 0.2s ease,
+    border-color 0.2s ease,
     box-shadow 0.2s ease;
-}
-.instagram-button svg {
-  position: relative;
-  z-index: 1;
-  width: 20px;
-  height: 20px;
-}
-.instagram-button span {
-  position: relative;
-  z-index: 1;
 }
 .instagram-button::before {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(
-      circle at 28% 110%,
-      #feda77 0 18%,
-      #f58529 34%,
-      transparent 52%
-    ),
-    radial-gradient(
-      circle at 78% 12%,
-      #515bd4 0 18%,
-      #8134af 38%,
-      transparent 58%
-    ),
-    radial-gradient(circle at 52% 54%, #dd2a7b 0 34%, #8134af 72%, #515bd4 100%);
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(135deg, #feda77, #dd2a7b, #8134af, #515bd4);
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition:
+    opacity 0.2s ease;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+.instagram-button svg,
+.instagram-button span {
+  position: relative;
+  z-index: 1;
+}
+.instagram-button svg {
+  width: 20px;
+  height: 20px;
+  color: #dd2a7b;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
 }
 .instagram-button:hover {
-  color: white;
-  box-shadow: 0 18px 38px rgba(221, 42, 123, 0.28);
+  transform: translateY(-2px);
+  border-color: transparent;
+  box-shadow: 0 18px 38px rgba(16, 21, 16, 0.14);
 }
 .instagram-button:hover::before {
   opacity: 1;
+}
+.instagram-button:hover svg {
+  color: #8134af;
+  transform: rotate(-4deg) scale(1.08);
 }
 
 .hero {
@@ -293,6 +298,10 @@ section {
   gap: 18px;
   margin-top: 34px;
 }
+.cards-single {
+  grid-template-columns: 1fr;
+  margin-top: 0;
+}
 .card {
   padding: 26px;
   border: 1px solid var(--line);
@@ -399,28 +408,21 @@ section {
 }
 [data-relation] {
   transition:
-    transform 0.22s ease,
-    opacity 0.22s ease,
-    filter 0.22s ease,
-    box-shadow 0.22s ease,
-    border-color 0.22s ease,
-    background 0.22s ease;
+    transform 180ms ease,
+    opacity 180ms ease,
+    border-color 180ms ease;
 }
 .groups-section.is-relation-initiation-active [data-relation="initiation"],
 .groups-section.is-relation-competition-active [data-relation="competition"] {
-  transform: translateY(-3px);
+  transform: translate3d(0, -3px, 0);
   border-color: rgba(149, 194, 61, 0.75);
-  background: rgba(149, 194, 61, 0.1);
-  box-shadow:
-    0 22px 60px rgba(16, 21, 16, 0.1),
-    0 0 0 4px rgba(149, 194, 61, 0.14);
+  outline: 4px solid rgba(149, 194, 61, 0.14);
 }
 .groups-section.is-relation-initiation-active
   [data-relation]:not([data-relation="initiation"]),
 .groups-section.is-relation-competition-active
   [data-relation]:not([data-relation="competition"]) {
-  opacity: 0.58;
-  filter: saturate(0.75);
+  opacity: 0.62;
 }
 .training-route-overlay {
   position: absolute;
@@ -442,42 +444,30 @@ section {
   stroke-width: 2.5;
   stroke-dasharray: 8 5;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 6px rgba(149, 194, 61, 0.55));
   transition:
-    opacity 0.22s ease,
-    stroke-width 0.22s ease,
-    filter 0.22s ease;
+    opacity 180ms ease,
+    stroke-width 180ms ease;
 }
 .route-overlay-start {
   fill: var(--club);
   stroke: white;
   stroke-width: 2;
-  filter: drop-shadow(0 0 5px rgba(149, 194, 61, 0.85));
-  transition:
-    opacity 0.22s ease,
-    filter 0.22s ease;
+  transition: opacity 180ms ease;
 }
 .route-overlay-shadow {
-  transition: opacity 0.22s ease;
+  transition: opacity 180ms ease;
 }
 .groups-section.is-relation-initiation-active .route-overlay-line-initiation,
 .groups-section.is-relation-competition-active .route-overlay-line-competition {
   stroke-width: 4;
   stroke-dasharray: 10 5;
   opacity: 1;
-  filter: drop-shadow(0 0 12px rgba(149, 194, 61, 0.9));
-}
-.groups-section.is-relation-initiation-active .route-overlay-start-initiation,
-.groups-section.is-relation-competition-active
-  .route-overlay-start-competition {
-  filter: drop-shadow(0 0 10px rgba(149, 194, 61, 1));
 }
 .groups-section.is-relation-initiation-active .route-overlay-line-competition,
 .groups-section.is-relation-competition-active .route-overlay-line-initiation,
 .groups-section.is-relation-initiation-active .route-overlay-start-competition,
 .groups-section.is-relation-competition-active .route-overlay-start-initiation {
   opacity: 0.18;
-  filter: none;
 }
 .groups-section.is-relation-initiation-active .route-overlay-shadow-competition,
 .groups-section.is-relation-competition-active
@@ -542,167 +532,6 @@ section {
 }
 .map-grid-competition {
   grid-template-columns: repeat(3, 1fr);
-}
-.map-card {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: white;
-  box-shadow: 0 18px 50px rgba(16, 21, 16, 0.06);
-}
-.map-card.is-bazin-location {
-  position: relative;
-  z-index: 4;
-}
-.map-card.is-schedule-target {
-  transform: translateY(-3px);
-  border-color: rgba(149, 194, 61, 0.9);
-  box-shadow:
-    0 22px 60px rgba(16, 21, 16, 0.12),
-    0 0 0 4px rgba(149, 194, 61, 0.18);
-}
-.map-frame {
-  position: relative;
-  z-index: 0;
-  height: 240px;
-  background: rgba(149, 194, 61, 0.14);
-  border-top: 1px solid var(--line);
-}
-.map-frame .leaflet-tile-pane {
-  filter: saturate(0.72) contrast(0.96) brightness(1.03);
-}
-.map-frame .leaflet-control-attribution {
-  font-size: 0.66rem;
-  color: rgba(16, 21, 16, 0.58);
-}
-.club-map-marker {
-  background: transparent;
-  border: 0;
-}
-.club-map-marker span {
-  position: relative;
-  display: block;
-  width: 30px;
-  height: 30px;
-  border: 4px solid white;
-  border-radius: 999px 999px 999px 4px;
-  background: var(--club);
-  box-shadow:
-    0 10px 22px rgba(16, 21, 16, 0.26),
-    0 0 0 6px rgba(149, 194, 61, 0.2);
-  transform: rotate(-45deg);
-}
-.club-map-marker span::after {
-  content: "";
-  position: absolute;
-  inset: 7px;
-  border-radius: 999px;
-  background: var(--ink);
-  opacity: 0.82;
-}
-.map-content {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  padding: 22px;
-}
-.location-heading {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 18px;
-}
-.location-icon {
-  display: grid;
-  place-items: center;
-  flex: 0 0 42px;
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-  color: var(--club-text);
-}
-.location-icon.is-indoor {
-  background: rgba(16, 21, 16, 0.06);
-}
-.location-icon.is-outdoor {
-  background: rgba(149, 194, 61, 0.18);
-}
-.location-icon svg {
-  width: 24px;
-  height: 24px;
-}
-.map-content .location-title h3 {
-  margin: 0;
-  font-size: 1.25rem;
-  line-height: 1.12;
-}
-.map-content .location-title p {
-  margin: 5px 0 0;
-  color: var(--club-text);
-  font-family: var(--display);
-  font-size: 0.88rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  line-height: 1.25;
-  text-transform: uppercase;
-}
-.location-conditions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 8px;
-}
-.weather-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 7px;
-  border-radius: 999px;
-  background: rgba(149, 194, 61, 0.1);
-  color: var(--ink);
-  font-family: var(--display);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-}
-.weather-chip svg {
-  width: 14px;
-  height: 14px;
-  color: var(--club-text);
-}
-.map-content strong {
-  display: block;
-  margin-bottom: 8px;
-  color: var(--club-text);
-  font-family: var(--display);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.map-content h3 {
-  margin: 0 0 8px;
-  font-size: 1.35rem;
-}
-.map-content p {
-  margin: 0 0 16px;
-  color: var(--muted);
-  line-height: 1.55;
-}
-.map-content a {
-  margin-top: auto;
-  color: var(--ink);
-  font-family: var(--display);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  text-decoration-color: var(--club);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 4px;
-}
-.map-content a:hover {
-  color: var(--club-text);
 }
 .split {
   display: grid;
@@ -874,6 +703,13 @@ section {
   }
   .training-route-overlay {
     display: none;
+  }
+  .groups-section.is-relation-initiation-active [data-relation],
+  .groups-section.is-relation-competition-active [data-relation],
+  .map-card.is-schedule-target {
+    transform: none;
+    opacity: 1;
+    outline: 0;
   }
   .photo-card {
     min-height: 300px;
