@@ -136,7 +136,10 @@ export const site = {
       usedBy: "Compétition - lundi",
       type: "indoor",
       usage: "Lundi",
-      conditions: [],
+      conditions: [
+        { icon: "rain", label: "Pluie" },
+        { icon: "winter", label: "Hiver" },
+      ],
       group: "competition",
       lat: 48.7426544,
       lon: 6.1820486,
