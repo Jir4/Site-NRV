@@ -8,47 +8,46 @@ const { icon } = Astro.props;
 
 {
   icon === "sun" && (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2" />
-      <path
-        d="M12 2.5v3M12 18.5v3M21.5 12h-3M5.5 12h-3M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1M18.7 18.7l-2.1-2.1M7.4 7.4 5.3 5.3"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-      />
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2" />
+      <path d="M12 20v2" />
+      <path d="m4.93 4.93 1.41 1.41" />
+      <path d="m17.66 17.66 1.41 1.41" />
+      <path d="M2 12h2" />
+      <path d="M20 12h2" />
+      <path d="m6.34 17.66-1.41 1.41" />
+      <path d="m19.07 4.93-1.41 1.41" />
     </svg>
   )
 }
 
 {
   icon === "rain" && (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M7 15.5h9.3a3.7 3.7 0 0 0 .7-7.3 5.5 5.5 0 0 0-10.4 1.5A3 3 0 0 0 7 15.5Z"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M8 19l-1 2M13 19l-1 2M18 19l-1 2"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-      />
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 14.9A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.2" />
+      <path d="M16 14v6" />
+      <path d="M8 14v6" />
+      <path d="M12 16v6" />
     </svg>
   )
 }
 
 {
   icon === "winter" && (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M12 3v18M5.6 6.2l12.8 11.6M18.4 6.2 5.6 17.8"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-      />
-      <circle cx="12" cy="12" r="2" fill="currentColor" />
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="m10 20-1.25-2.5L6 18" />
+      <path d="M10 4 8.75 6.5 6 6" />
+      <path d="m14 20 1.25-2.5L18 18" />
+      <path d="m14 4 1.25 2.5L18 6" />
+      <path d="m17 21-3-6h-4" />
+      <path d="m17 3-3 6 1.5 3" />
+      <path d="M2 12h6.5L10 9" />
+      <path d="m20 10-1.5 2 1.5 2" />
+      <path d="M22 12h-6.5L14 15" />
+      <path d="m4 10 1.5 2L4 14" />
+      <path d="m7 21 3-6-1.5-3" />
+      <path d="m7 3 3 6h4" />
     </svg>
   )
 }

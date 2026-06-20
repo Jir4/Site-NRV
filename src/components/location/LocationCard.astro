@@ -1,6 +1,7 @@
 ---
-import WeatherIcon from "./icons/WeatherIcon.astro";
-import type { Location } from "../data/site";
+import type { Location } from "../../data/site";
+import LocationActions from "./LocationActions.astro";
+import WeatherIcon from "../icons/WeatherIcon.astro";
 
 interface Props {
   location: Location;
@@ -10,8 +11,6 @@ interface Props {
 }
 
 const { location, className = "", relation, routeTo = false } = Astro.props;
-const getOsmUrl = (lat: number, lon: number) =>
-  `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=17/${lat}/${lon}`;
 ---
 
 <article
@@ -24,7 +23,10 @@ const getOsmUrl = (lat: number, lon: number) =>
     <div class="location-heading">
       <div class="location-title">
         <h3>{location.name}</h3>
-        <p>{location.type === "outdoor" ? "Outdoor" : "Indoor"} · {location.usage}</p>
+        <p>
+          {location.type === "outdoor" ? "Outdoor" : "Indoor"} · {location.usage}
+        </p>
+
         {
           location.conditions.length > 0 && (
             <div class="location-conditions" aria-label="Conditions météo">
@@ -39,16 +41,14 @@ const getOsmUrl = (lat: number, lon: number) =>
         }
       </div>
     </div>
-    <p class="location-address">{location.address}</p>
-    <a
-      href={getOsmUrl(location.lat, location.lon)}
-      target="_blank"
-      rel="noreferrer"
-      aria-label={`Ouvrir ${location.name} dans OpenStreetMap`}
-    >
-      Voir la carte
-    </a>
+
+    <div class="location-place">
+      <p class="location-label">Emplacement</p>
+      <p class="location-address-text">{location.address}</p>
+      <LocationActions location={location} />
+    </div>
   </div>
+
   <div
     class="map-frame"
     data-map
@@ -61,6 +61,8 @@ const getOsmUrl = (lat: number, lon: number) =>
 
 <style>
   .map-card {
+    position: relative;
+    z-index: 4;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -71,20 +73,20 @@ const getOsmUrl = (lat: number, lon: number) =>
     transition:
       transform 180ms ease,
       opacity 180ms ease,
-      border-color 180ms ease;
-    will-change: transform;
+      border-color 180ms ease,
+      outline-color 180ms ease;
   }
 
   .map-card.is-bazin-location {
-    position: relative;
-    z-index: 4;
+    z-index: 5;
   }
 
   .map-card.is-schedule-target {
-    transform: translate3d(0, -3px, 0);
+    transform: translateY(-3px);
     border-color: rgba(149, 194, 61, 0.9);
     outline: 4px solid rgba(149, 194, 61, 0.18);
   }
+
 
   .map-frame {
     position: relative;
@@ -141,13 +143,13 @@ const getOsmUrl = (lat: number, lon: number) =>
     margin-bottom: 18px;
   }
 
-  .map-content .location-title h3 {
+  .location-title h3 {
     margin: 0;
     font-size: 1.25rem;
     line-height: 1.12;
   }
 
-  .map-content .location-title p {
+  .location-title p {
     margin: 5px 0 0;
     color: var(--club-text);
     font-family: var(--display);
@@ -179,61 +181,34 @@ const getOsmUrl = (lat: number, lon: number) =>
     letter-spacing: 0.03em;
   }
 
-  .weather-chip svg {
+  .weather-chip :global(svg) {
     width: 14px;
     height: 14px;
     color: var(--club-text);
   }
 
-  .map-content h3 {
-    margin: 0 0 8px;
-    font-size: 1.35rem;
-  }
-
-  .map-content p {
+  .location-place {
     margin: 0 0 16px;
-    color: var(--muted);
-    line-height: 1.55;
-  }
-
-  .location-address {
-    position: relative;
-    padding: 10px 12px 10px 34px;
+    padding: 12px;
     border: 1px solid rgba(16, 21, 16, 0.08);
     border-radius: 16px;
-    background: linear-gradient(
-      135deg,
-      rgba(149, 194, 61, 0.12),
-      rgba(255, 255, 255, 0.72)
-    );
-    font-size: 0.95rem;
+    background: rgba(149, 194, 61, 0.08);
   }
 
-  .location-address::before {
-    content: "";
-    position: absolute;
-    top: 15px;
-    left: 14px;
-    width: 9px;
-    height: 9px;
-    border: 3px solid var(--club);
-    border-radius: 999px 999px 999px 2px;
-    transform: rotate(-45deg);
-  }
-
-  .map-content a {
-    margin-top: auto;
-    color: var(--ink);
+  .location-label {
+    margin: 0 0 6px;
+    color: var(--club-text);
     font-family: var(--display);
+    font-size: 0.82rem;
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    text-decoration-color: var(--club);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 4px;
   }
 
-  .map-content a:hover {
-    color: var(--club-text);
+  .location-address-text {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.55;
   }
 </style>

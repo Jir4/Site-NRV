@@ -12,8 +12,8 @@ const { site } = Astro.props;
 ---
 
 <nav class="nav" aria-label="Navigation principale">
-  <a class="brand" href="#accueil" data-egg aria-label="Retour à l'accueil">
-    <Image src={logoNrv} alt="" width={100} height={46} decoding="async" />
+  <a class="brand" href="#accueil" aria-label="Retour à l'accueil">
+    <Image src={logoNrv} alt="" width={140} height={46} decoding="async" />
   </a>
   <div class="links">
     <a href="#groupes" data-section-link>Groupes</a>
@@ -22,7 +22,13 @@ const { site } = Astro.props;
     <a href="#galerie" data-section-link>Galerie</a>
     <a href="#contact" data-section-link>Contact</a>
   </div>
-  <a class="button" href={site.helloAssoUrl} target="_blank" rel="noreferrer" data-join-cta>
+  <a
+    class="button"
+    href={site.helloAssoUrl}
+    target="_blank"
+    rel="noreferrer"
+    data-join-cta
+  >
     S'INSCRIRE
   </a>
 </nav>

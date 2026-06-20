@@ -1,0 +1,101 @@
+---
+import type { Location } from "../../data/site";
+import CopyIcon from "../icons/CopyIcon.astro";
+import ExternalLinkIcon from "../icons/ExternalLinkIcon.astro";
+import LocationAction from "./LocationAction.astro";
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+
+const getOsmUrl = (lat: number, lon: number) =>
+  `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=17/${lat}/${lon}`;
+---
+
+<div class="location-actions" aria-label={`Actions pour ${location.name}`}>
+  <LocationAction
+    label="Copier"
+    ariaLabel={`Copier l'adresse de ${location.name}`}
+    copyValue={location.address}
+  >
+    <CopyIcon slot="icon" />
+  </LocationAction>
+
+  <LocationAction
+    label="Carte"
+    ariaLabel={`Ouvrir ${location.name} dans OpenStreetMap`}
+    href={getOsmUrl(location.lat, location.lon)}
+    external
+  >
+    <ExternalLinkIcon slot="icon" />
+  </LocationAction>
+</div>
+
+<script>
+  const copyText = async (value: string) => {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(value);
+      return;
+    }
+
+    const textarea = document.createElement("textarea");
+    textarea.value = value;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.top = "-9999px";
+    textarea.style.left = "-9999px";
+
+    document.body.append(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    textarea.remove();
+  };
+
+  document.querySelectorAll<HTMLButtonElement>("[data-copy-address]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const value = button.dataset.copyValue;
+      const feedback = button.querySelector<HTMLElement>("[data-copy-feedback]");
+
+      if (!value || !feedback) {
+        return;
+      }
+
+      const initialText = feedback.textContent ?? "Copier";
+
+      try {
+        await copyText(value);
+
+        button.classList.add("is-copied");
+        feedback.textContent = "Copié";
+
+        window.setTimeout(() => {
+          button.classList.remove("is-copied");
+          feedback.textContent = initialText;
+        }, 1600);
+      } catch {
+        feedback.textContent = "Erreur";
+
+        window.setTimeout(() => {
+          feedback.textContent = initialText;
+        }, 1600);
+      }
+    });
+  });
+</script>
+
+<style>
+  .location-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  @media (max-width: 420px) {
+    .location-actions {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

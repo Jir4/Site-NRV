@@ -6,13 +6,32 @@ const setActiveRelation = (groupsSection: Element | null, relation?: string | nu
 export const initializeGroupRelations = () => {
   const groupsSection = document.querySelector(".groups-section");
 
-  document.querySelectorAll<HTMLElement>("[data-relation]").forEach((element) => {
-    const relation = element.dataset.relation;
+  let activeCardRelation: string | null = null;
+  let activeHintRelation: string | null = null;
 
-    element.addEventListener("pointerenter", () => setActiveRelation(groupsSection, relation));
-    element.addEventListener("focusin", () => setActiveRelation(groupsSection, relation));
-    element.addEventListener("pointerleave", () => setActiveRelation(groupsSection, null));
-    element.addEventListener("focusout", () => setActiveRelation(groupsSection, null));
+  const updateRelation = () => {
+    setActiveRelation(groupsSection, activeHintRelation ?? activeCardRelation);
+  };
+
+  document.querySelectorAll<HTMLElement>("[data-relation]").forEach((element) => {
+    const relation = element.dataset.relation ?? null;
+
+    element.addEventListener("pointerenter", () => {
+      activeCardRelation = relation;
+      updateRelation();
+    });
+    element.addEventListener("focusin", () => {
+      activeCardRelation = relation;
+      updateRelation();
+    });
+    element.addEventListener("pointerleave", () => {
+      activeCardRelation = null;
+      updateRelation();
+    });
+    element.addEventListener("focusout", () => {
+      activeCardRelation = null;
+      updateRelation();
+    });
   });
 
   const clearActiveSchedules = () => {
@@ -23,25 +42,34 @@ export const initializeGroupRelations = () => {
       slot.classList.remove("is-active");
       slot.setAttribute("aria-pressed", "false");
     });
-    setActiveRelation(groupsSection, null);
   };
 
-  document.querySelectorAll<HTMLElement>("[data-schedule-relation]").forEach((slot) => {
+  document.querySelectorAll<HTMLElement>(".schedule-line__hint").forEach((hint) => {
+    const slot = hint.closest<HTMLElement>("[data-schedule-relation]");
+    if (!slot) return;
+
     const activate = () => {
       clearActiveSchedules();
       slot.classList.add("is-active");
       slot.setAttribute("aria-pressed", "true");
-      setActiveRelation(groupsSection, slot.dataset.scheduleRelation);
+      activeHintRelation = slot.dataset.scheduleRelation ?? null;
+      updateRelation();
 
       slot.dataset.locationIds?.split(" ").forEach((id) => {
         document.querySelector(`[data-location-id="${id}"]`)?.classList.add("is-schedule-target");
       });
     };
 
-    slot.addEventListener("pointerenter", activate);
-    slot.addEventListener("focus", activate);
-    slot.addEventListener("click", activate);
-    slot.addEventListener("pointerleave", clearActiveSchedules);
-    slot.addEventListener("blur", clearActiveSchedules);
+    const deactivate = () => {
+      clearActiveSchedules();
+      activeHintRelation = null;
+      updateRelation();
+    };
+
+    hint.addEventListener("pointerenter", activate);
+    hint.addEventListener("focus", activate);
+    hint.addEventListener("click", activate);
+    hint.addEventListener("pointerleave", deactivate);
+    hint.addEventListener("blur", deactivate);
   });
 };

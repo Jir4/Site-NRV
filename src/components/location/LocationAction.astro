@@ -1,0 +1,112 @@
+---
+interface Props {
+  label: string;
+  ariaLabel: string;
+  href?: string;
+  copyValue?: string;
+  external?: boolean;
+}
+
+const { label, ariaLabel, href, copyValue, external = false } = Astro.props;
+---
+
+{
+  href ? (
+    <a
+      class="location-action"
+      href={href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noreferrer" : undefined}
+      aria-label={ariaLabel}
+    >
+      <span class="location-action__icon" aria-hidden="true">
+        <slot name="icon" />
+      </span>
+      <span class="location-action__label">{label}</span>
+    </a>
+  ) : (
+    <button
+      class="location-action"
+      type="button"
+      data-copy-address
+      data-copy-value={copyValue}
+      aria-label={ariaLabel}
+    >
+      <span class="location-action__icon" aria-hidden="true">
+        <slot name="icon" />
+      </span>
+      <span class="location-action__label" data-copy-feedback aria-live="polite">
+        {label}
+      </span>
+    </button>
+  )
+}
+
+<style>
+  .location-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    width: 100%;
+    gap: 7px;
+    padding: 0 12px;
+    border: 1px solid rgba(16, 21, 16, 0.1);
+    border-radius: 999px;
+    background: white;
+    color: var(--ink);
+    font: inherit;
+    font-family: var(--display);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      transform 0.18s ease,
+      border-color 0.18s ease,
+      color 0.18s ease,
+      background 0.18s ease;
+  }
+
+  .location-action:hover,
+  .location-action:focus-visible {
+    transform: translateY(-1px);
+    border-color: rgba(149, 194, 61, 0.65);
+    background: rgba(149, 194, 61, 0.08);
+    color: var(--club-text);
+  }
+
+  .location-action:focus-visible {
+    outline: 3px solid rgba(149, 194, 61, 0.24);
+    outline-offset: 2px;
+  }
+
+  .location-action.is-copied {
+    border-color: rgba(149, 194, 61, 0.75);
+    background: rgba(149, 194, 61, 0.12);
+    color: var(--club-text);
+  }
+
+  .location-action__icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+  }
+
+  .location-action__icon :global(svg) {
+    display: block;
+    width: 16px;
+    height: 16px;
+  }
+
+  .location-action__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+</style>

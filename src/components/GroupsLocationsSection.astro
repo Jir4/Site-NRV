@@ -1,26 +1,83 @@
 ---
-import LocationCard from "./LocationCard.astro";
 import type { Group, Location, ScheduleSlot, SiteConfig } from "../data/site";
+import LocationCard from "./location/LocationCard.astro";
 
 interface Props {
   site: SiteConfig;
 }
 
 const { site } = Astro.props;
-const initiationLocations = site.locations.filter((location) => location.group === "initiation");
-const competitionLocations = site.locations.filter((location) => location.group === "competition");
+const initiationLocations = site.locations.filter(
+  (location) => location.group === "initiation",
+);
+const competitionLocations = site.locations.filter(
+  (location) => location.group === "competition",
+);
 ---
 
 <section id="groupes" class="groups-section">
   <div class="wrap">
     <h2 class="section-title">Groupes, horaires et lieux.</h2>
     <p class="intro">
-      Le club accompagne les nouveaux patineurs dès 5 ans, les ados et adultes qui veulent s’initier, puis les compétiteurs qui cherchent la performance.
+      Le club accompagne les nouveaux patineurs dès 5 ans, les ados et adultes
+      qui veulent s’initier, puis les compétiteurs qui cherchent la performance.
     </p>
     <div class="group-grid">
-      <div class="group-bundle" data-route-from data-relation="initiation" aria-label="Groupes d'initiation du jeudi">
-        {site.groups.slice(0, 2).map((group: Group) => (
-          <article class="card group-card">
+      <div
+        class="group-bundle"
+        data-route-from
+        data-relation="initiation"
+        aria-label="Groupes d'initiation du jeudi"
+      >
+        {
+          site.groups.slice(0, 2).map((group: Group) => (
+            <article class="card group-card">
+              <strong>{group.age}</strong>
+              <h3>{group.name}</h3>
+              <p>{group.pitch}</p>
+              <div class="group-time">
+                <span>Horaires</span>
+                <div class="schedule-list">
+                  {group.schedule.map((slot: ScheduleSlot) => (
+                    <button
+                      class="schedule-line"
+                      type="button"
+                      data-schedule-relation="initiation"
+                      data-location-ids={slot.locationIds.join(" ")}
+                      aria-pressed="false"
+                    >
+                      <span class="schedule-line__body">
+                        <b>
+                          {slot.label} {slot.time}
+                        </b>
+                        {slot.note && <small>{slot.note}</small>}
+                      </span>
+                      {slot.locationIds.length > 0 && (
+                        <span class="schedule-line__hint" aria-hidden="true">
+                          <svg viewBox="0 0 16 16" focusable="false">
+                            <path d="M6 4l4 4-4 4" />
+                          </svg>
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+      {
+        site.groups.slice(2).map((group: Group) => (
+          <article
+            class={`card group-card ${group.name === "Compétition" ? "group-card-wide" : ""}`}
+            data-route-from-competition={
+              group.name === "Compétition" ? true : undefined
+            }
+            data-relation={
+              group.name === "Compétition" ? "competition" : undefined
+            }
+          >
             <strong>{group.age}</strong>
             <h3>{group.name}</h3>
             <p>{group.pitch}</p>
@@ -28,67 +85,110 @@ const competitionLocations = site.locations.filter((location) => location.group 
               <span>Horaires</span>
               <div class="schedule-list">
                 {group.schedule.map((slot: ScheduleSlot) => (
-                  <button class="schedule-line" type="button" data-schedule-relation="initiation" data-location-ids={slot.locationIds.join(" ")} aria-pressed="false">
-                    <b>{slot.label} {slot.time}</b>
-                    {slot.note && <small>{slot.note}</small>}
+                  <button
+                    class="schedule-line"
+                    type="button"
+                    data-schedule-relation="competition"
+                    data-location-ids={slot.locationIds.join(" ")}
+                    aria-pressed="false"
+                  >
+                    <span class="schedule-line__body">
+                      <b>
+                        {slot.label} {slot.time}
+                      </b>
+                      {slot.note && <small>{slot.note}</small>}
+                    </span>
+                    {slot.locationIds.length > 0 && (
+                      <span class="schedule-line__hint" aria-hidden="true">
+                        <svg viewBox="0 0 16 16" focusable="false">
+                          <path d="M6 4l4 4-4 4" />
+                        </svg>
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>
             </div>
           </article>
-        ))}
-      </div>
-      {site.groups.slice(2).map((group: Group) => (
-        <article
-          class={`card group-card ${group.name === "Compétition" ? "group-card-wide" : ""}`}
-          data-route-from-competition={group.name === "Compétition" ? true : undefined}
-          data-relation={group.name === "Compétition" ? "competition" : undefined}
-        >
-          <strong>{group.age}</strong>
-          <h3>{group.name}</h3>
-          <p>{group.pitch}</p>
-          <div class="group-time">
-            <span>Horaires</span>
-            <div class="schedule-list">
-              {group.schedule.map((slot: ScheduleSlot) => (
-                <button class="schedule-line" type="button" data-schedule-relation="competition" data-location-ids={slot.locationIds.join(" ")} aria-pressed="false">
-                  <b>{slot.label} {slot.time}</b>
-                  {slot.note && <small>{slot.note}</small>}
-                </button>
-              ))}
-            </div>
-          </div>
-        </article>
-      ))}
+        ))
+      }
     </div>
     <div class="section-kicker">
       <h3>Les lieux d’entraînement</h3>
-      <p>Cartes allégées avec marker sur chaque gymnase et lien d’ouverture dans OpenStreetMap.</p>
+      <p>
+        Cartes allégées avec marker sur chaque gymnase et lien d’ouverture dans
+        OpenStreetMap.
+      </p>
     </div>
     <div class="locations-layout" aria-label="Cartes des lieux d'entraînement">
       <div class="map-grid map-grid-single">
-        {initiationLocations.map((location: Location) => (
-          <LocationCard location={location} className="is-bazin-location" relation="initiation" routeTo />
-        ))}
+        {
+          initiationLocations.map((location: Location) => (
+            <LocationCard
+              location={location}
+              className="is-bazin-location"
+              relation="initiation"
+              routeTo
+            />
+          ))
+        }
       </div>
-      <section class="location-group location-group-competition" data-route-to-competition data-relation="competition" aria-label="Lieux du groupe compétition">
+      <section
+        class="location-group location-group-competition"
+        data-route-to-competition
+        data-relation="competition"
+        aria-label="Lieux du groupe compétition"
+      >
         <div class="map-grid map-grid-competition">
-          {competitionLocations.map((location: Location) => <LocationCard location={location} />)}
+          {
+            competitionLocations.map((location: Location) => (
+              <LocationCard location={location} />
+            ))
+          }
         </div>
       </section>
     </div>
-    <svg class="training-route-overlay" data-route-overlay aria-hidden="true" focusable="false">
+    <svg
+      class="training-route-overlay"
+      data-route-overlay
+      aria-hidden="true"
+      focusable="false"
+    >
       <defs>
-        <marker id="route-end-dot" markerWidth="12" markerHeight="12" refX="6" refY="6" orient="auto" markerUnits="strokeWidth">
+        <marker
+          id="route-end-dot"
+          markerWidth="12"
+          markerHeight="12"
+          refX="6"
+          refY="6"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
           <circle cx="6" cy="6" r="4" fill="#95c23d"></circle>
         </marker>
       </defs>
-      <path class="route-overlay-shadow route-overlay-shadow-initiation" data-route-shadow></path>
-      <path class="route-overlay-line route-overlay-line-initiation" data-route-line marker-end="url(#route-end-dot)"></path>
-      <circle class="route-overlay-start route-overlay-start-initiation" data-route-start r="6"></circle>
-      <path class="route-overlay-shadow route-overlay-shadow-competition" data-route-competition-shadow></path>
-      <path class="route-overlay-line route-overlay-line-competition" data-route-competition-line marker-end="url(#route-end-dot)"></path>
-      <circle class="route-overlay-start route-overlay-start-competition" data-route-competition-start r="6"></circle>
+      <path
+        class="route-overlay-shadow route-overlay-shadow-initiation"
+        data-route-shadow></path>
+      <path
+        class="route-overlay-line route-overlay-line-initiation"
+        data-route-line
+        marker-end="url(#route-end-dot)"></path>
+      <circle
+        class="route-overlay-start route-overlay-start-initiation"
+        data-route-start
+        r="6"></circle>
+      <path
+        class="route-overlay-shadow route-overlay-shadow-competition"
+        data-route-competition-shadow></path>
+      <path
+        class="route-overlay-line route-overlay-line-competition"
+        data-route-competition-line
+        marker-end="url(#route-end-dot)"></path>
+      <circle
+        class="route-overlay-start route-overlay-start-competition"
+        data-route-competition-start
+        r="6"></circle>
     </svg>
   </div>
 </section>
