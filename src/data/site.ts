@@ -92,7 +92,7 @@ export const site = {
         "S’entraîner pour la performance, les courses et l’esprit d’équipe.",
       time: "Lundi 19h - 20h30, mercredi 18h - 20h et jeudi 19h - 20h30",
       schedule: [
-        { label: "Lundi", time: "19h - 20h30", locationIds: ["moulin-noir"] },
+        { label: "Lundi", time: "19h - 20h30", locationIds: ["moulin-noir", "cosec"] },
         { label: "Mercredi", time: "18h - 20h", locationIds: ["jacquet"] },
         {
           label: "Jeudi",

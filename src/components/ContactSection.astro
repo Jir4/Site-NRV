@@ -1,14 +1,21 @@
 ---
 import type { Contact, SiteConfig } from "../data/site";
+import { obfuscatePhone } from "../utils/phone";
 
 interface Props { site: SiteConfig }
 const { site } = Astro.props;
 
-const getPhoneHref = (detail?: string) => {
-  const phoneNumber = detail?.replaceAll(".", "").replaceAll(" ", "");
-
-  return phoneNumber && /^\d+$/.test(phoneNumber) ? `tel:${phoneNumber}` : null;
+const isPhone = (detail?: string): boolean => {
+  const digits = detail?.replaceAll(".", "").replaceAll(" ", "");
+  return !!(digits && /^\d+$/.test(digits));
 };
+
+const getInitials = (name: string): string =>
+  name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2);
 ---
 
 <section class="light" id="contact">
@@ -22,20 +29,112 @@ const getPhoneHref = (detail?: string) => {
     </div>
     <div class="cards cards-single">
       {site.contacts.map((contact: Contact) => {
-        const phoneHref = getPhoneHref(contact.detail);
+        const phoneEncoded = isPhone(contact.detail) ? obfuscatePhone(contact.detail!) : null;
 
         return (
-          <article class="card">
-            <strong>{contact.role}</strong>
-            <h3>{contact.name}</h3>
-            {phoneHref ? (
-              <p><a href={phoneHref}>{contact.detail}</a></p>
-            ) : (
-              contact.detail && <p>{contact.detail}</p>
-            )}
+          <article class="card contact-card">
+            <div class="contact-avatar" aria-hidden="true">
+              <svg viewBox="0 0 80 80" width="80" height="80">
+                <circle cx="40" cy="40" r="40" fill="var(--club)" />
+                <text x="40" y="40" text-anchor="middle" dominant-baseline="central" fill="white" font-size="26" font-weight="700" font-family="var(--display)">
+                  {getInitials(contact.name)}
+                </text>
+              </svg>
+            </div>
+            <div class="contact-body">
+              <strong>{contact.role}</strong>
+              <h3>{contact.name}</h3>
+              {phoneEncoded ? (
+                <p><a href="#" class="contact-phone" data-phone={phoneEncoded}></a></p>
+              ) : contact.detail ? (
+                <p>{contact.detail}</p>
+              ) : (
+                <p aria-hidden="true">&nbsp;</p>
+              )}
+            </div>
           </article>
         );
       })}
     </div>
   </div>
 </section>
+
+<script>
+  import { revealPhones } from "../utils/phone";
+  revealPhones();
+</script>
+
+<style>
+  .contact-card {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  .contact-avatar {
+    flex-shrink: 0;
+    align-self: flex-start;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .contact-avatar svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .contact-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4px 0;
+  }
+
+  .contact-body strong {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 999px;
+    background: rgba(149, 194, 61, 0.12);
+    color: var(--club-text);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+
+  .contact-body h3 {
+    margin: 0 0 6px;
+    font-size: 1.35rem;
+  }
+
+  .contact-phone {
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: rgba(149, 194, 61, 0.35);
+    text-underline-offset: 4px;
+    transition:
+      color 0.2s ease,
+      text-decoration-color 0.2s ease;
+  }
+
+  .contact-phone:hover {
+    color: var(--club-text);
+    text-decoration-color: var(--club);
+  }
+
+  @media (max-width: 540px) {
+    .contact-avatar {
+      width: 64px;
+      height: 64px;
+    }
+
+    .contact-card {
+      gap: 16px;
+    }
+  }
+</style>

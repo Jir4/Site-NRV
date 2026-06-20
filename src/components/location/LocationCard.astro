@@ -1,7 +1,7 @@
 ---
 import type { Location } from "../../data/site";
-import LocationActions from "./LocationActions.astro";
 import WeatherIcon from "../icons/WeatherIcon.astro";
+import LocationActions from "./LocationActions.astro";
 
 interface Props {
   location: Location;
@@ -24,7 +24,9 @@ const { location, className = "", relation, routeTo = false } = Astro.props;
       <div class="location-title">
         <h3>{location.name}</h3>
         <p>
-          {location.type === "outdoor" ? "Outdoor" : "Indoor"} · {location.usage}
+          {location.type === "outdoor" ? "Outdoor" : "Indoor"} · {
+            location.usage
+          }
         </p>
 
         {
@@ -56,7 +58,8 @@ const { location, className = "", relation, routeTo = false } = Astro.props;
     data-lon={location.lon}
     data-title={location.name}
     aria-label={`Carte - ${location.name}`}
-  />
+  >
+  </div>
 </article>
 
 <style>
@@ -79,6 +82,7 @@ const { location, className = "", relation, routeTo = false } = Astro.props;
 
   .map-card.is-bazin-location {
     z-index: 5;
+    margin: 16px 0;
   }
 
   .map-card.is-schedule-target {
@@ -86,7 +90,6 @@ const { location, className = "", relation, routeTo = false } = Astro.props;
     border-color: rgba(149, 194, 61, 0.9);
     outline: 4px solid rgba(149, 194, 61, 0.18);
   }
-
 
   .map-frame {
     position: relative;
@@ -188,7 +191,7 @@ const { location, className = "", relation, routeTo = false } = Astro.props;
   }
 
   .location-place {
-    margin: 0 0 16px;
+    margin: auto 0 16px;
     padding: 12px;
     border: 1px solid rgba(16, 21, 16, 0.08);
     border-radius: 16px;

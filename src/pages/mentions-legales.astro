@@ -1,6 +1,7 @@
 ---
 import { site } from "../data/site";
 import "../styles/global.css";
+import { obfuscatePhone } from "../utils/phone";
 
 const currentYear = new Date().getFullYear();
 const president = site.contacts.find((contact) => contact.role === "Président");
@@ -40,7 +41,7 @@ const president = site.contacts.find((contact) => contact.role === "Président")
             <h2>{site.clubName}</h2>
             <p>Club de roller de vitesse basé à Nancy.</p>
             <p>Email : <a href={`mailto:${site.email}`}>{site.email}</a></p>
-            <p>Téléphone : <a href={`tel:${site.phone.replaceAll(".", "")}`}>{site.phone}</a></p>
+            <p>Téléphone : <a href="#" data-phone={obfuscatePhone(site.phone)}></a></p>
           </article>
 
           <article class="card legal-card">
@@ -89,5 +90,9 @@ const president = site.contacts.find((contact) => contact.role === "Président")
         </div>
       </section>
     </main>
+    <script>
+      import { revealPhones } from "../utils/phone";
+      revealPhones();
+    </script>
   </body>
 </html>

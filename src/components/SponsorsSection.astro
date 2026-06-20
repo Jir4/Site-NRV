@@ -1,19 +1,170 @@
 ---
+import { Image } from "astro:assets";
+import grandNancyLogo from "../assets/partners/grand-nancy.png";
+import villeNancyLogo from "../assets/partners/ville-nancy.png";
+
 interface Props { sponsors: string[] }
 const { sponsors } = Astro.props;
+
+const getSponsorLogo = (sponsor: string) => {
+  if (sponsor === "Ville de Nancy") {
+    return { src: villeNancyLogo, className: "is-square", width: 140, height: 140 };
+  }
+
+  if (sponsor === "Métropole du Grand Nancy") {
+    return { src: grandNancyLogo, className: "is-wide", width: 300, height: 120 };
+  }
+
+  return null;
+};
 ---
 
 <section id="sponsors" class="dark">
   <div class="wrap">
     <h2 class="section-title">Ils soutiennent le club.</h2>
-    <div class="cards">
-      {sponsors.map((sponsor) => (
-        <article class="card">
-          <strong>Partenaire</strong>
-          <h3>{sponsor}</h3>
-          <p>Logo à intégrer dans la version finale.</p>
-        </article>
-      ))}
+    <p class="intro">
+      Partenaires institutionnels qui accompagnent le développement du roller de vitesse à Nancy.
+    </p>
+    <div class="partners-grid">
+      {sponsors.map((sponsor) => {
+        const logo = getSponsorLogo(sponsor);
+
+        return (
+          <article class="partner-card">
+            <div class={`partner-logo ${logo?.className ?? ""}`} aria-hidden="true">
+              {logo ? (
+                <Image
+                  src={logo.src}
+                  alt=""
+                  width={logo.width}
+                  height={logo.height}
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <span>{sponsor}</span>
+              )}
+            </div>
+            <strong>Partenaire institutionnel</strong>
+            <h3>{sponsor}</h3>
+          </article>
+        );
+      })}
     </div>
   </div>
 </section>
+
+<style>
+  .partners-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 34px;
+  }
+
+  .partner-card {
+    display: flex;
+    min-height: 252px;
+    flex-direction: column;
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.08);
+    transition:
+      transform 0.2s ease,
+      border-color 0.2s ease,
+      background 0.2s ease;
+  }
+
+  .partner-card:hover,
+  .partner-card:focus-within {
+    transform: translateY(-2px);
+    border-color: rgba(149, 194, 61, 0.48);
+    background: rgba(255, 255, 255, 0.11);
+  }
+
+  .partner-logo {
+    display: grid;
+    place-items: center;
+    flex: 1;
+    min-height: 146px;
+    margin-bottom: 20px;
+    padding: 28px 34px;
+    border: 1px solid rgba(16, 21, 16, 0.08);
+    border-radius: 24px;
+    background: linear-gradient(180deg, #ffffff, #f6f7f1);
+  }
+
+  .partner-logo :global(img) {
+    display: block;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: grayscale(1);
+    opacity: 0.74;
+    transition:
+      filter 0.22s ease,
+      opacity 0.22s ease;
+  }
+
+  .partner-logo.is-square :global(img) {
+    max-width: 112px;
+    max-height: 112px;
+  }
+
+  .partner-logo.is-wide :global(img) {
+    max-width: min(100%, 280px);
+    max-height: 92px;
+  }
+
+  .partner-logo span {
+    color: var(--ink);
+    font-family: var(--display);
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    text-align: center;
+  }
+
+  .partner-card:hover .partner-logo :global(img),
+  .partner-card:focus-within .partner-logo :global(img) {
+    filter: grayscale(0);
+    opacity: 1;
+  }
+
+  .partner-card strong {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--club);
+    font-family: var(--display);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .partner-card h3 {
+    margin: 0;
+    color: white;
+    font-size: clamp(1.25rem, 2.2vw, 1.55rem);
+    line-height: 1.08;
+  }
+
+  @media (hover: none) {
+    .partner-logo :global(img) {
+      filter: grayscale(0);
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .partners-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .partner-card {
+      min-height: 0;
+    }
+  }
+</style>

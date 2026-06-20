@@ -1,9 +1,148 @@
 <section id="galerie" class="dark">
   <div class="wrap">
     <h2 class="section-title">La vitesse en images.</h2>
-    <p class="intro">Emplacements prévus pour les entraînements enfants, les compétitions, les portraits et les photos de groupe.</p>
-    <div class="gallery" aria-label="Galerie photos à compléter">
-      <div class="shot">Entraînement enfants</div><div class="shot">Départ</div><div class="shot">Équipe</div><div class="shot">Compétition</div><div class="shot">Portraits</div>
+    <p class="intro">
+      Emplacements prévus pour les entraînements enfants, les compétitions, les
+      portraits et les photos de groupe.
+    </p>
+    <div class="gallery" aria-label="Galerie photos du club">
+      <article class="shot" aria-label="Emplacement photo entraînement sur piste">
+        <div class="shot-skeleton" aria-hidden="true">
+          <span class="shot-skeleton__icon"></span>
+          <span class="shot-skeleton__line"></span>
+          <span class="shot-skeleton__line is-short"></span>
+        </div>
+      </article>
+      <article class="shot" aria-label="Emplacement photo départ de course">
+        <div class="shot-skeleton" aria-hidden="true">
+          <span class="shot-skeleton__icon"></span>
+          <span class="shot-skeleton__line"></span>
+          <span class="shot-skeleton__line is-short"></span>
+        </div>
+      </article>
+      <article class="shot" aria-label="Emplacement photo équipe">
+        <div class="shot-skeleton" aria-hidden="true">
+          <span class="shot-skeleton__icon"></span>
+          <span class="shot-skeleton__line"></span>
+          <span class="shot-skeleton__line is-short"></span>
+        </div>
+      </article>
+      <article class="shot" aria-label="Emplacement photo compétition">
+        <div class="shot-skeleton" aria-hidden="true">
+          <span class="shot-skeleton__icon"></span>
+          <span class="shot-skeleton__line"></span>
+          <span class="shot-skeleton__line is-short"></span>
+        </div>
+      </article>
+      <article class="shot" aria-label="Emplacement photo portraits">
+        <div class="shot-skeleton" aria-hidden="true">
+          <span class="shot-skeleton__icon"></span>
+          <span class="shot-skeleton__line"></span>
+          <span class="shot-skeleton__line is-short"></span>
+        </div>
+      </article>
     </div>
   </div>
 </section>
+
+<style>
+  .gallery {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr 1fr;
+    grid-auto-rows: 190px;
+    gap: 16px;
+    margin-top: 34px;
+  }
+
+  .shot {
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 30px;
+    border: 1px dashed rgba(255, 255, 255, 0.22);
+    background:
+      linear-gradient(135deg, rgba(149, 194, 61, 0.16), transparent 38%),
+      linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+    isolation: isolate;
+  }
+
+  .shot::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      110deg,
+      transparent 0%,
+      transparent 34%,
+      rgba(255, 255, 255, 0.1) 45%,
+      transparent 56%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: gallery-skeleton 2.2s ease-in-out infinite;
+  }
+
+  .shot-skeleton {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    gap: 14px;
+    width: min(180px, 58%);
+  }
+
+  .shot-skeleton__icon {
+    width: 42px;
+    height: 42px;
+    border: 2px solid rgba(255, 255, 255, 0.32);
+    border-radius: 14px;
+    background:
+      radial-gradient(circle at 34% 34%, rgba(255, 255, 255, 0.48) 0 10%, transparent 11%),
+      linear-gradient(135deg, transparent 45%, rgba(255, 255, 255, 0.22) 46% 58%, transparent 59%);
+  }
+
+  .shot-skeleton__line {
+    width: 100%;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  .shot-skeleton__line.is-short {
+    width: 64%;
+    opacity: 0.72;
+  }
+
+  .shot:nth-child(1) {
+    grid-row: span 2;
+  }
+
+  @keyframes gallery-skeleton {
+    0% {
+      transform: translateX(-100%);
+    }
+
+    55%,
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shot::before {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 840px) {
+    .gallery {
+      grid-template-columns: 1fr;
+      grid-auto-rows: 200px;
+    }
+
+    .shot:nth-child(1) {
+      grid-row: span 1;
+    }
+  }
+</style>

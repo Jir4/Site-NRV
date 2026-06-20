@@ -44,6 +44,7 @@ const { label, ariaLabel, href, copyValue, external = false } = Astro.props;
 
 <style>
   .location-action {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -64,11 +65,26 @@ const { label, ariaLabel, href, copyValue, external = false } = Astro.props;
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
+    overflow: hidden;
     transition:
       transform 0.18s ease,
       border-color 0.18s ease,
       color 0.18s ease,
-      background 0.18s ease;
+      background 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+
+  .location-action::after {
+    content: "";
+    position: absolute;
+    inset: 50%;
+    width: 180%;
+    aspect-ratio: 1;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(215, 255, 121, 0.85), rgba(149, 194, 61, 0.42) 38%, transparent 66%);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.2);
   }
 
   .location-action:hover,
@@ -85,17 +101,32 @@ const { label, ariaLabel, href, copyValue, external = false } = Astro.props;
   }
 
   .location-action.is-copied {
-    border-color: rgba(149, 194, 61, 0.75);
-    background: rgba(149, 194, 61, 0.12);
-    color: var(--club-text);
+    border-color: rgba(215, 255, 121, 0.92);
+    background: var(--club);
+    color: var(--ink);
+    box-shadow:
+      0 0 0 4px rgba(149, 194, 61, 0.18),
+      0 12px 24px rgba(149, 194, 61, 0.28);
+    transform: translateY(-2px) scale(1.05);
+  }
+
+  .location-action.is-copied::after {
+    animation: copy-ripple 760ms ease-out;
   }
 
   .location-action__icon {
+    position: relative;
+    z-index: 1;
     display: grid;
     place-items: center;
     flex: 0 0 auto;
     width: 16px;
     height: 16px;
+    transition: transform 0.18s ease;
+  }
+
+  .location-action.is-copied .location-action__icon {
+    transform: rotate(-10deg) scale(1.28);
   }
 
   .location-action__icon :global(svg) {
@@ -105,8 +136,41 @@ const { label, ariaLabel, href, copyValue, external = false } = Astro.props;
   }
 
   .location-action__label {
+    position: relative;
+    z-index: 1;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  @keyframes copy-ripple {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.2);
+    }
+
+    28% {
+      opacity: 1;
+    }
+
+    62% {
+      opacity: 0.65;
+    }
+
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .location-action.is-copied,
+    .location-action.is-copied .location-action__icon {
+      transform: none;
+    }
+
+    .location-action.is-copied::after {
+      animation: none;
+    }
   }
 </style>
