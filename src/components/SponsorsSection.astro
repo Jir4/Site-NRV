@@ -3,16 +3,28 @@ import { Image } from "astro:assets";
 import grandNancyLogo from "../assets/partners/grand-nancy.png";
 import villeNancyLogo from "../assets/partners/ville-nancy.png";
 
-interface Props { sponsors: string[] }
+interface Props {
+  sponsors: string[];
+}
 const { sponsors } = Astro.props;
 
 const getSponsorLogo = (sponsor: string) => {
   if (sponsor === "Ville de Nancy") {
-    return { src: villeNancyLogo, className: "is-square", width: 140, height: 140 };
+    return {
+      src: villeNancyLogo,
+      className: "is-wide is-ville-nancy",
+      width: 1333,
+      height: 551,
+    };
   }
 
   if (sponsor === "Métropole du Grand Nancy") {
-    return { src: grandNancyLogo, className: "is-wide", width: 300, height: 120 };
+    return {
+      src: grandNancyLogo,
+      className: "is-wide",
+      width: 300,
+      height: 120,
+    };
   }
 
   return null;
@@ -23,33 +35,41 @@ const getSponsorLogo = (sponsor: string) => {
   <div class="wrap">
     <h2 class="section-title">Ils soutiennent le club.</h2>
     <p class="intro">
-      Partenaires institutionnels qui accompagnent le développement du roller de vitesse à Nancy.
+      Partenaires institutionnels qui accompagnent le développement du roller de
+      vitesse à Nancy.
     </p>
     <div class="partners-grid">
-      {sponsors.map((sponsor) => {
-        const logo = getSponsorLogo(sponsor);
+      {
+        sponsors.map((sponsor) => {
+          const logo = getSponsorLogo(sponsor);
 
-        return (
-          <article class="partner-card">
-            <div class={`partner-logo ${logo?.className ?? ""}`} aria-hidden="true">
-              {logo ? (
-                <Image
-                  src={logo.src}
-                  alt=""
-                  width={logo.width}
-                  height={logo.height}
-                  loading="lazy"
-                  decoding="async"
-                />
-              ) : (
-                <span>{sponsor}</span>
-              )}
-            </div>
-            <strong>Partenaire institutionnel</strong>
-            <h3>{sponsor}</h3>
-          </article>
-        );
-      })}
+          return (
+            <article class="partner-card">
+              <div
+                class={`partner-logo ${logo?.className ?? ""}`}
+                aria-hidden="true"
+              >
+                <div class="partner-logo-inner">
+                  {logo ? (
+                    <Image
+                      src={logo.src}
+                      alt=""
+                      width={logo.width}
+                      height={logo.height}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <span>{sponsor}</span>
+                  )}
+                </div>
+              </div>
+              <strong>Partenaire institutionnel</strong>
+              <h3>{sponsor}</h3>
+            </article>
+          );
+        })
+      }
     </div>
   </div>
 </section>
@@ -85,36 +105,45 @@ const getSponsorLogo = (sponsor: string) => {
 
   .partner-logo {
     display: grid;
-    place-items: center;
     flex: 1;
     min-height: 146px;
     margin-bottom: 20px;
-    padding: 28px 34px;
+    overflow: hidden;
     border: 1px solid rgba(16, 21, 16, 0.08);
     border-radius: 24px;
     background: linear-gradient(180deg, #ffffff, #f6f7f1);
   }
 
+  .partner-logo-inner {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 28px 34px;
+  }
+
   .partner-logo :global(img) {
     display: block;
+    max-width: 100%;
+    max-height: 100%;
     width: auto;
     height: auto;
     object-fit: contain;
-    filter: grayscale(1);
+    filter: grayscale(1) brightness(0.44) contrast(0.92);
     opacity: 0.74;
     transition:
       filter 0.22s ease,
       opacity 0.22s ease;
   }
 
-  .partner-logo.is-square :global(img) {
-    max-width: 112px;
-    max-height: 112px;
-  }
-
   .partner-logo.is-wide :global(img) {
     max-width: min(100%, 280px);
     max-height: 92px;
+  }
+
+  .partner-logo.is-ville-nancy :global(img) {
+    max-width: min(100%, 320px);
+    max-height: 120px;
   }
 
   .partner-logo span {
@@ -129,7 +158,7 @@ const getSponsorLogo = (sponsor: string) => {
 
   .partner-card:hover .partner-logo :global(img),
   .partner-card:focus-within .partner-logo :global(img) {
-    filter: grayscale(0);
+    filter: none;
     opacity: 1;
   }
 

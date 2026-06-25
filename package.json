@@ -1,13 +1,19 @@
 {
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "generate:maps": "tsx scripts/generate-static-maps.ts",
+    "check": "astro check",
+    "build": "npm run generate:maps && astro build",
     "preview": "astro preview"
   },
   "dependencies": {
-    "@astrojs/check": "latest",
-    "astro": "latest",
-    "typescript": "latest"
+    "astro": "^7.0.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@astrojs/check": "^0.9.2",
+    "@types/node": "26.0.0",
+    "sharp": "0.34.5",
+    "tsx": "4.22.4",
+    "typescript": "6.0.3"
+  }
 }

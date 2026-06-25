@@ -1,0 +1,26 @@
+{
+  "bazin": {
+    "address": "24 rue des glacis, 54000 Nancy",
+    "lat": 48.6996841,
+    "lon": 6.1744965,
+    "displayName": "Rue des Glacis, III Maisons, Crosne, Vayringe, Nancy, Meurthe-et-Moselle, Grand Est, France métropolitaine, 54100, France"
+  },
+  "moulin-noir": {
+    "address": "Chemin du Moulin Noir, Lay-Saint-Christophe",
+    "lat": 48.7426544,
+    "lon": 6.1820486,
+    "displayName": "Chemin du Moulin Noir, Lay-Saint-Christophe, Nancy, Meurthe-et-Moselle, Grand Est, France métropolitaine, 54690, France"
+  },
+  "jacquet": {
+    "address": "Viaduc Louis Marin, 54000 Nancy",
+    "lat": 48.7016809,
+    "lon": 6.1903361,
+    "displayName": "Viaduc Louis Marin, Rives de Meurthe, Nancy, Meurthe-et-Moselle, Grand Est, France métropolitaine, 54100, France"
+  },
+  "cosec": {
+    "address": "1 rue Jean Moulin, 54510 Tomblaine",
+    "lat": 48.6967469,
+    "lon": 6.2158655,
+    "displayName": "Rue Jean Moulin, Tomblaine, Nancy, Meurthe-et-Moselle, Grand Est, France métropolitaine, 54510, France"
+  }
+}

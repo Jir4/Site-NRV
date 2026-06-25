@@ -1,5 +1,6 @@
 ---
 import type { Location } from "../../data/site";
+import { getLocationOsmUrl } from "../../utils/maps";
 import CopyIcon from "../icons/CopyIcon.astro";
 import ExternalLinkIcon from "../icons/ExternalLinkIcon.astro";
 import LocationAction from "./LocationAction.astro";
@@ -9,9 +10,7 @@ interface Props {
 }
 
 const { location } = Astro.props;
-
-const getOsmUrl = (lat: number, lon: number) =>
-  `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=17/${lat}/${lon}`;
+const osmUrl = getLocationOsmUrl(location);
 ---
 
 <div class="location-actions" aria-label={`Actions pour ${location.name}`}>
@@ -26,7 +25,7 @@ const getOsmUrl = (lat: number, lon: number) =>
   <LocationAction
     label="Carte"
     ariaLabel={`Ouvrir ${location.name} dans OpenStreetMap`}
-    href={getOsmUrl(location.lat, location.lon)}
+    href={osmUrl}
     external
   >
     <ExternalLinkIcon slot="icon" />

@@ -44,10 +44,7 @@ export const initializeGroupRelations = () => {
     });
   };
 
-  document.querySelectorAll<HTMLElement>(".schedule-line__hint").forEach((hint) => {
-    const slot = hint.closest<HTMLElement>("[data-schedule-relation]");
-    if (!slot) return;
-
+  document.querySelectorAll<HTMLElement>("[data-schedule-relation]").forEach((slot) => {
     const activate = () => {
       clearActiveSchedules();
       slot.classList.add("is-active");
@@ -66,10 +63,10 @@ export const initializeGroupRelations = () => {
       updateRelation();
     };
 
-    hint.addEventListener("pointerenter", activate);
-    hint.addEventListener("focus", activate);
-    hint.addEventListener("click", activate);
-    hint.addEventListener("pointerleave", deactivate);
-    hint.addEventListener("blur", deactivate);
+    slot.addEventListener("pointerenter", activate);
+    slot.addEventListener("focus", activate);
+    slot.addEventListener("click", activate);
+    slot.addEventListener("pointerleave", deactivate);
+    slot.addEventListener("blur", deactivate);
   });
 };

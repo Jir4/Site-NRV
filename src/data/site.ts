@@ -28,8 +28,6 @@ export interface Location {
   usage: string;
   conditions: LocationCondition[];
   group: "initiation" | "competition";
-  lat: number;
-  lon: number;
 }
 
 export interface Price {
@@ -80,19 +78,23 @@ export const site = {
       name: "Initiation",
       age: "12 ans et plus",
       pitch:
-        "Se perfectionner, gagner en aisance et rejoindre une dynamique de club.",
+        "Un groupe pour apprendre et prendre confiance, en s’intégrant à la vie du club.",
       time: "Jeudi 19h - 20h",
       schedule: [{ label: "Jeudi", time: "19h - 20h", locationIds: ["bazin"] }],
       place: "Gymnase Bazin, 49 rue Henri Bazin, 54000 Nancy",
     },
     {
       name: "Compétition",
-      age: "Patineurs expérimentés",
+      age: "Patineurs confirmés",
       pitch:
-        "S’entraîner pour la performance, les courses et l’esprit d’équipe.",
+        "Un groupe pour les patineurs confirmés, qui veulent s’entraîner, progresser ensemble et se préparer aux compétitions.",
       time: "Lundi 19h - 20h30, mercredi 18h - 20h et jeudi 19h - 20h30",
       schedule: [
-        { label: "Lundi", time: "19h - 20h30", locationIds: ["moulin-noir", "cosec"] },
+        {
+          label: "Lundi",
+          time: "19h - 20h30",
+          locationIds: ["moulin-noir", "cosec"],
+        },
         { label: "Mercredi", time: "18h - 20h", locationIds: ["jacquet"] },
         {
           label: "Jeudi",
@@ -120,14 +122,12 @@ export const site = {
     {
       id: "bazin",
       name: "Gymnase Bazin",
-      address: "49 rue Henri Bazin, 54000 Nancy",
+      address: "24 rue des glacis, 54000 Nancy",
       usedBy: "Enfants et initiation",
       type: "indoor",
       usage: "Enfants & initiation · Jeudi",
       conditions: [],
       group: "initiation",
-      lat: 48.6970011,
-      lon: 6.1943577,
     },
     {
       id: "moulin-noir",
@@ -141,8 +141,6 @@ export const site = {
         { icon: "winter", label: "Hiver" },
       ],
       group: "competition",
-      lat: 48.7426544,
-      lon: 6.1820486,
     },
     {
       id: "jacquet",
@@ -153,20 +151,16 @@ export const site = {
       usage: "Mercredi",
       conditions: [],
       group: "competition",
-      lat: 48.7004429,
-      lon: 6.1856432,
     },
     {
       id: "cosec",
       name: "Anneau du COSEC",
       address: "1 rue Jean Moulin, 54510 Tomblaine",
-      usedBy: "Compétition - jeudi",
+      usedBy: "Compétition - lundi / jeudi",
       type: "outdoor",
-      usage: "Jeudi",
+      usage: "Lundi · Jeudi",
       conditions: [{ icon: "sun", label: "Beau temps et chaud" }],
       group: "competition",
-      lat: 48.6952987,
-      lon: 6.2130854,
     },
   ],
   contacts: [

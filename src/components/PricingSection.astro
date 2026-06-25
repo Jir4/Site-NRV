@@ -1,7 +1,9 @@
 ---
 import type { Price, SiteConfig } from "../data/site";
 
-interface Props { site: SiteConfig }
+interface Props {
+  site: SiteConfig;
+}
 const { site } = Astro.props;
 ---
 
@@ -10,17 +12,63 @@ const { site } = Astro.props;
     <div>
       <h2 class="section-title">Tarifs et inscription.</h2>
       <p class="intro">
-        Les tarifs indiqués correspondent à une année de cotisation complète pour la saison. Ils comprennent l’adhésion au club, l’accès aux cours et la licence fédérale. Paiement possible en chèques, espèces, chèques vacances, bons CAF et Pass’Sport selon conditions.
+        Les tarifs indiqués correspondent à une année de cotisation complète
+        pour la saison. Ils comprennent l’adhésion au club, l’accès aux cours et
+        la licence fédérale.
       </p>
-      <a class="button" href={site.helloAssoUrl} target="_blank" rel="noreferrer" data-join-cta>S'inscrire</a>
+      <div class="trial-note" aria-label="Séances d'essai">
+        <strong>Séances d’essai</strong>
+        <p>
+          Deux séances d’essai sont proposées avant l’inscription, sous réserve
+          de places disponibles.
+        </p>
+      </div>
+      <a
+        class="button"
+        href={site.helloAssoUrl}
+        target="_blank"
+        rel="noreferrer"
+        data-join-cta>S'inscrire</a
+      >
     </div>
     <div class="cards cards-single">
-      {site.prices.map((price: Price) => (
-        <article class="card price">
-          <span><strong>{price.label}</strong>{price.details}</span>
-          <b>{price.value}</b>
-        </article>
-      ))}
+      {
+        site.prices.map((price: Price) => (
+          <article class="card price">
+            <span>
+              <strong>{price.label}</strong>
+              {price.details}
+            </span>
+            <b>{price.value}</b>
+          </article>
+        ))
+      }
     </div>
   </div>
 </section>
+
+<style>
+  .trial-note {
+    margin: 22px 0 26px;
+    padding: 14px 16px;
+    border: 1px solid rgba(149, 194, 61, 0.28);
+    border-radius: 18px;
+    background: rgba(149, 194, 61, 0.12);
+  }
+
+  .trial-note strong {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--club);
+    font-family: var(--display);
+    font-size: 0.86rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .trial-note p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.82);
+    line-height: 1.55;
+  }
+</style>

@@ -1,0 +1,14 @@
+{
+  "bazin": {
+    "signature": "d458bffc43ae7f744b14967af44b8760e20fe7b1a9bd5c6a8d06ce64861f1269"
+  },
+  "moulin-noir": {
+    "signature": "0a9d0686d9f0b92cdec08fbf0d776f30be90ecff97eae904741978caf037e3eb"
+  },
+  "jacquet": {
+    "signature": "79e6529d69309328971b8f92907fcdfc963942aff6bc435219e4d8d350caa264"
+  },
+  "cosec": {
+    "signature": "5ca494109d191e069c2714fe37a0bf9a22cdef8985c849ccb992eae9225b817f"
+  }
+}

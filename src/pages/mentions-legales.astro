@@ -1,42 +1,31 @@
 ---
+import BaseLayout from "../layouts/BaseLayout.astro";
 import { site } from "../data/site";
-import "../styles/global.css";
 import { obfuscatePhone } from "../utils/phone";
 
 const currentYear = new Date().getFullYear();
 const president = site.contacts.find((contact) => contact.role === "Président");
 ---
 
-<!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={`Mentions légales du site ${site.clubName}.`} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <title>Mentions légales - {site.clubName}</title>
-  </head>
-  <body>
-    <main class="page legal-page">
-      <section class="legal-hero">
-        <div class="wrap">
-          <p class="eyebrow">Informations légales</p>
-          <h1>Mentions légales</h1>
-          <p class="lead">
-            Cette page présente les informations relatives à l’édition, à l’hébergement et à l’utilisation du site officiel de {site.clubName}.
-          </p>
-          <p><a class="button" href="/">Retour au site</a></p>
-        </div>
-      </section>
+<BaseLayout
+  title={`Mentions légales - ${site.clubName}`}
+  description={`Mentions légales du site ${site.clubName}.`}
+>
+  <main class="page legal-page">
+    <section class="legal-hero">
+      <div class="wrap">
+        <p class="eyebrow">Informations légales</p>
+        <h1>Mentions légales</h1>
+        <p class="lead">
+          Cette page présente les informations relatives à l’édition, à l’hébergement et à l’utilisation du site officiel de {site.clubName}.
+        </p>
+        <p><a class="button" href="/">Retour au site</a></p>
+      </div>
+    </section>
 
-      <section>
-        <div class="wrap legal-grid">
-          <article class="card legal-card">
+    <section>
+      <div class="wrap legal-grid">
+        <article class="card legal-card">
             <strong>Éditeur du site</strong>
             <h2>{site.clubName}</h2>
             <p>Club de roller de vitesse basé à Nancy.</p>
@@ -53,9 +42,9 @@ const president = site.contacts.find((contact) => contact.role === "Président")
 
           <article class="card legal-card">
             <strong>Hébergement</strong>
-            <h2>Serveur privé</h2>
-            <p>Le site est hébergé sur un serveur privé virtuel (VPS) administré pour le compte du club.</p>
-            <p>Les coordonnées complètes du fournisseur d’hébergement du VPS sont à compléter avant la mise en ligne publique.</p>
+            <h2>Reflect-Tech</h2>
+            <p>Le site est hébergé sur un serveur privé virtuel (VPS) administré par Reflect-Tech pour le compte du club.</p>
+            <p>L’infrastructure du VPS est fournie par Hetzner. Les coordonnées complètes de l’hébergeur seront précisées à confirmation de la configuration définitive de production.</p>
           </article>
 
           <article class="card legal-card">
@@ -77,7 +66,7 @@ const president = site.contacts.find((contact) => contact.role === "Président")
             <strong>Cookies et services tiers</strong>
             <h2>Fonctionnement du site</h2>
             <p>Ce site statique ne dépose pas de cookies de mesure d’audience ou de publicité.</p>
-            <p>Des services tiers peuvent être chargés pour afficher certaines fonctionnalités : cartes OpenStreetMap/Leaflet, polices Google Fonts, lien Instagram et inscription HelloAsso.</p>
+            <p>Des liens ou ressources tiers peuvent être utilisés : cartes générées à partir de données OpenStreetMap et de tuiles CARTO, polices Google Fonts, lien Instagram et inscription HelloAsso.</p>
           </article>
 
           <article class="card legal-card">
@@ -87,12 +76,11 @@ const president = site.contacts.find((contact) => contact.role === "Président")
             <p>Cartographie : données © OpenStreetMap contributors, tuiles CARTO.</p>
             <p>Dernière mise à jour : {currentYear}.</p>
           </article>
-        </div>
-      </section>
-    </main>
-    <script>
-      import { revealPhones } from "../utils/phone";
-      revealPhones();
-    </script>
-  </body>
-</html>
+      </div>
+    </section>
+  </main>
+  <script>
+    import { revealPhones } from "../utils/phone";
+    revealPhones();
+  </script>
+</BaseLayout>

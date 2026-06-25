@@ -1,10 +1,11 @@
 export const initializeActiveNav = () => {
   const navLinks = [...document.querySelectorAll<HTMLAnchorElement>("[data-section-link]")];
+  const isHTMLElement = (element: HTMLElement | null): element is HTMLElement => element !== null;
   const trackedSections = navLinks
     .map((link) => document.querySelector<HTMLElement>(link.getAttribute("href") ?? ""))
-    .filter(Boolean);
+    .filter(isHTMLElement);
   const heroSection = document.querySelector<HTMLElement>("#accueil");
-  const observedSections = [heroSection, ...trackedSections].filter(Boolean);
+  const observedSections = [heroSection, ...trackedSections].filter(isHTMLElement);
 
   if (navLinks.length === 0 || observedSections.length === 0) return;
 
