@@ -28,7 +28,12 @@ export function revealPhones(): void {
     if (!raw) return;
     const decoded = [...raw].map((c) => DECIPHER[c] ?? c).join("");
     const digits = decoded.replace(/[^\d]/g, "");
-    el.textContent = decoded;
+    const displayMode = el.getAttribute("data-phone-display") ?? "text";
+
+    if (displayMode !== "none") {
+      el.textContent = decoded;
+    }
+
     if (el instanceof HTMLAnchorElement) {
       el.href = `tel:${digits}`;
     }
