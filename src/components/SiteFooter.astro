@@ -3,7 +3,9 @@ import { Image } from "astro:assets";
 import mfocusLogo from "../assets/brand/mfocus.png";
 import reflectLogo from "../assets/brand/reflect-tech.svg";
 
-interface Props { clubName: string }
+interface Props {
+  clubName: string;
+}
 const { clubName } = Astro.props;
 ---
 
@@ -16,11 +18,36 @@ const { clubName } = Astro.props;
     <div class="web-partners" aria-labelledby="web-partners-title">
       <span id="web-partners-title">Partenaires Web</span>
       <div class="web-partners-list">
-        <a href="https://www.mfocus.fr/" target="_blank" rel="noreferrer" aria-label="Mfocus">
-          <Image src={mfocusLogo} alt="Mfocus" width={96} height={54} loading="lazy" decoding="async" />
+        <a
+          href="https://www.mfocus.fr/"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Mfocus"
+        >
+          <Image
+            src={mfocusLogo}
+            alt="Mfocus"
+            width={96}
+            height={54}
+            loading="lazy"
+            decoding="async"
+          />
         </a>
-        <a href="https://reflect-tech.fr/" target="_blank" rel="noreferrer" aria-label="Reflect-Tech">
-          <Image src={reflectLogo} alt="Reflect-Tech" width={108} height={48} loading="lazy" decoding="async" />
+        <a
+          href="https://reflect-tech.fr/"
+          class="web-partner-dark"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Reflect-Tech"
+        >
+          <Image
+            src={reflectLogo}
+            alt="Reflect-Tech"
+            width={108}
+            height={48}
+            loading="lazy"
+            decoding="async"
+          />
         </a>
       </div>
     </div>

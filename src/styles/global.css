@@ -362,6 +362,8 @@ section {
   font: inherit;
   text-align: left;
   cursor: default;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .schedule-line__body {
@@ -376,6 +378,10 @@ section {
   font-size: 1.18rem;
   font-weight: 700;
   letter-spacing: 0.03em;
+}
+
+.schedule-line:hover {
+  background-color: var(--paper);
 }
 
 .schedule-line__hint {
@@ -587,14 +593,16 @@ section {
 }
 .price {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 20px;
 }
 .price b {
+  display: block;
   font-size: 2.6rem;
   color: var(--club);
   white-space: nowrap;
+  text-align: center;
 }
 
 .footer {
@@ -654,6 +662,13 @@ section {
   transform: translateY(-2px);
   border-color: rgba(149, 194, 61, 0.55);
   background: rgba(149, 194, 61, 0.08);
+}
+.web-partners-list .web-partner-dark {
+  border-color: rgba(16, 21, 16, 0.12);
+  background: var(--ink);
+}
+.web-partners-list .web-partner-dark:hover {
+  background: #1a201a;
 }
 .web-partners-list img {
   display: block;
@@ -773,7 +788,7 @@ section {
   }
 
   .price b {
-    justify-self: start;
+    justify-self: center;
   }
 }
 

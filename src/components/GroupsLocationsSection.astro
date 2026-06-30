@@ -1,4 +1,5 @@
 ---
+import { ChevronRight } from "lucide-astro";
 import type { Group, Location, ScheduleSlot, SiteConfig } from "../data/site";
 import LocationCard from "./location/LocationCard.astro";
 
@@ -54,9 +55,7 @@ const competitionLocations = site.locations.filter(
                       </span>
                       {slot.locationIds.length > 0 && (
                         <span class="schedule-line__hint" aria-hidden="true">
-                          <svg viewBox="0 0 16 16" focusable="false">
-                            <path d="M6 4l4 4-4 4" />
-                          </svg>
+                          <ChevronRight aria-hidden="true" focusable="false" />
                         </span>
                       )}
                     </button>
@@ -100,9 +99,7 @@ const competitionLocations = site.locations.filter(
                     </span>
                     {slot.locationIds.length > 0 && (
                       <span class="schedule-line__hint" aria-hidden="true">
-                        <svg viewBox="0 0 16 16" focusable="false">
-                          <path d="M6 4l4 4-4 4" />
-                        </svg>
+                        <ChevronRight aria-hidden="true" focusable="false" />
                       </span>
                     )}
                   </button>
